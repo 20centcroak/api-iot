@@ -1,0 +1,56 @@
+installer GIT
+
+le configurer en tapant git config --global --edit
+cela ouvre un éditeur de texte de type ???
+On édite le texte en cliquant sur i, puis on tape du texte
+on quitte l'édition en tapant echap
+On enregistre et on quitte l'éditeur en tapant la commande wq
+
+
+
+utiliser gitHub avec GIT
+
+créer un compte sur github
+créer un dépôt (repository) sur github en cliquant sur "+" et "new repository"
+récupérer le lien [url] de ce dépôt grâce au bouton "clone or download" et cliquer sur le bouton "copy to clipboard"
+cloner ce dépôt localement : se positionner dans le répertoire où l'on souhaite créer la copie local et ouvrire une invite de commande. Cloner le dépôt grâce à la commande git clone [url]
+créer un commit grâce à la commande git commit "[message]"
+envoyer les fichiers grâce à la commande git push
+on peut choisir de ne pas inclure des fichiers à versionner en créant un fichier .gitignore et en y ajoutant les fichiers ou dossiers à exclure, par exemple si on veut exclure le dossier vendor, le fichier .gitignore contiendra la ligne "vendor/*"
+on peut mettre à jour la copie locale par la commande git pull
+
+
+
+créer un package avec composer dans github et créer un nouveau projet utilisant ce package
+
+dans le projet pour lequel on veut créer un package, on édite le fichier composer.json et on donne un nom au package :
+{
+    "name": "croak-iot/croak-iot",
+    "require": {
+        "monolog/monolog": "^1.22",
+        "slim/slim": "3.0"
+    }
+}
+on commit ce fichier avec les fichiers à mettre à jour sur github.
+on crée une release sur github avec un tag du type 1.0
+on copie l'adresse [url] du repository de github et on crée un nouveau fichier composer.json dans le réperoire où l'on veut créer le nouveau projet
+dans ce fichier composer.json, on mentionne le nom du répertoire et la dépendance du projet, par exemple :
+{
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/20centcroak/api-iot.git"
+        }
+    ],
+    "require": {
+        "croak-iot/croak-iot": "dev-master"
+    }
+}
+on ouvre une invite de commande dans ce même répertoire et on demande une installation par la commande "composer require croak-iot/croak-iot"
+
+tester une API REST avec curl
+installer executable curl pour windows (contenu dans archive zip)
+ouvrir une invite de commande depuis le dossier contenant curl puis taper la commande :
+curl -v -H "Content-Type: application/json" -X PUT -d "{\"temp\":\"28.5\"}" http://localhost:8080/add/0000
+dans visual studio code, il faut se situer dans le dossier contenant curl.exe et taper PS C:\curl\bin> .\curl.exe -v -H "Content-Type: application/json" -X PUT -d "{\"temp\":\"28.5\"}" http://localhost:8
+080/add/0000

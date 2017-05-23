@@ -1,0 +1,7 @@
+{
+    "name": "croak-iot/croak-iot",
+    "require": {
+        "monolog/monolog": "^1.22",
+        "slim/slim": "3.0"
+    }
+}
