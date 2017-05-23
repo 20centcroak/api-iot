@@ -55,24 +55,19 @@ void loop() {
   // URL  complexe composé du chemin et de deux 
   // questions contenant le nom de ville et l'API key
   
-  String url = String("/src/index.php/add/0000");
+  String get_url = String("/src/index.php/profile/0000");
+  String put_url = String("/src/index.php/add/0000");
+  Serial.println("**********************************************");
+  Serial.print("get with URL: ");
+  Serial.println(get_url);
   
-  Serial.print("demande URL: ");
-  Serial.println(url);
-  
-//  client.print(String("GET ") + url + " HTTP/1.1\r\n" +  "Host: " + host + "\r\n" + "Connection: close\r\n\r\n");
-  client.print(String("PUT ") + url + " HTTP/1.1\r\n" +  "Host: " + host + "\r\n" + "Connection: Keep-Alive\r\n" + "Content-Type: application/x-www-form-urlencoded\r\n" + "Content-Length: 15\r\n\r\n" + "{\"temp\":33.5}");
- 
-  //client.println("PUT /src/index.php/profile/0000 HTTP/1.1");
-//  client.print("Host: api-iot.croak.fr\r\n");                         
-//  client.print("Connection: close\r\n\r\n");
-//  client.println("Content-Type: application/x-www-form-urlencoded");
-//  client.println("Content-Length: 10\r\n");
-//  client.print("{\"on\":false}"); 
+  client.println(String("GET ") + get_url + " HTTP/1.1");
+  client.println(String("Host: ") + host);
+  client.println("Connection: Keep-Alive");
+  client.println();
 
   // On attend 1 seconde
-  delay(10000);
-
+  delay(1000);
   
   // On lit les données reçues, s'il y en a
   while(client.available()){
@@ -81,8 +76,30 @@ void loop() {
 
   } /* fin data avalaible */
 
-  //Serial.println("connexion fermée");
-  Serial.println("end");
+
+  Serial.println("//////////////////////////////////////////////////////");
+  Serial.print("put with URL: ");
+  Serial.println(put_url);
+
+  client.println(String("PUT ") + put_url + " HTTP/1.1");
+  client.println(String("Host: ") + host);
+  client.println("Connection: close");
+  client.println("Content-Type: application/x-www-form-urlencoded");
+  client.println("Content-Length: 15");
+  client.println();
+  client.println("{\"temp\":33.5}");
+
   // On attend 1 seconde
+  delay(1000);
+  
+  // On lit les données reçues, s'il y en a
+  while(client.available()){
+    String line = client.readStringUntil('\r');
+    Serial.println (line);
+
+  } /* fin data avalaible */
+
+  Serial.println("connexion closed");
+  // On attend 10 secondes
   delay(10000);
 }

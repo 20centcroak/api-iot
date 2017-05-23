@@ -1,4 +1,4 @@
-installer GIT
+﻿installer GIT
 
 le configurer en tapant git config --global --edit
 cela ouvre un éditeur de texte de type ???
@@ -54,3 +54,10 @@ ouvrir une invite de commande depuis le dossier contenant curl puis taper la com
 curl -v -H "Content-Type: application/json" -X PUT -d "{\"temp\":\"28.5\"}" http://localhost:8080/add/0000
 dans visual studio code, il faut se situer dans le dossier contenant curl.exe et taper PS C:\curl\bin> .\curl.exe -v -H "Content-Type: application/json" -X PUT -d "{\"temp\":\"28.5\"}" http://localhost:8
 080/add/0000
+
+
+Pour utiliser composer chez 1and1
+
+installer composer à la racine avec la commande curl -sS https://getcomposer.org/installer | /usr/bin/php5.5-cli
+aller dans le répertoire contenant un fichier composer.json, par exemple /api-iot
+lancer la mise à jour avec la commande /usr/bin/php5.5-cli ../composer.phar install
