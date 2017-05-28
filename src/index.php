@@ -27,7 +27,7 @@ $container['logger'] = function($c) {
     return $logger;
 };
 
-$app->get('/profile/{sn}', function (Request $request, Response $response, $args) {
+$app->get('/devices/{sn}', function (Request $request, Response $response, $args) {
 
 	$profile_sn = (string)$args['sn'];
     $this->logger->addInfo("get profile for ".$profile_sn);
@@ -50,7 +50,7 @@ $app->get('/profile/{sn}', function (Request $request, Response $response, $args
 });
 
 
-$app->put('/add/{sn}', function ($request, $response, $args) {
+$app->put('/devices/{sn}', function ($request, $response, $args) {
     
     $id = (string)$args['sn'];
     $this->logger->addInfo("put infos for ".$id);    
