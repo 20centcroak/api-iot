@@ -1,20 +1,34 @@
 <?php
 
+//TODO voir pertinence de cela
+// exec("composer.phar update", $out, $ret);
+//         if(!$ret) {
+//             print("update ok");
+//         } else {
+//            print("update nok");
+//         }
+
 require_once '../vendor/autoload.php';
 require_once '../app/config/dev.php';
 require_once '../app/app.php';
 
 use Croak\Iot\Init\Build;
+use Croak\Iot\Exceptions\InitException;
 
-$app = new \Slim\App(["settings" => $config]);
+$logger =$app->getContainer()->get('logger');
 
-if (!Build::isBuilt()){
-    $app->logger->addInfo("init failed");
-    return;
+try{
+    if(!Build::check()){
+        $logger->addInfo("init failed");
+        return;
+    }
 }
-$app->logger->addInfo("init ok");
+catch(InitException $e){
+     $logger->addInfo($e->getMessage());
+     return;
+}
 
-
+$logger->addInfo("init ok");
 
 require_once '../app/routes.php';
 

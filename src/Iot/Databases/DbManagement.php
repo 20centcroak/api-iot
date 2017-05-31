@@ -5,7 +5,7 @@ use Croak\Iot\Exceptions\DataBaseException;
 
 class DbManagement
 {
-    private const URL = 'sqlite:../../db/iotDB.sqlite';
+    private const URL = 'sqlite:../db/iotDB.sqlite';
     private $pdo;
 
     private function __construct($pdo)
@@ -27,9 +27,10 @@ class DbManagement
         }
     }
 
-    public function query($query, $arrayData){
+    public function query($query, $arrayData=array()){    
         $request = $this->pdo->prepare($query);
-        return $request->execute($arrayData);
+        print("sent array : ".var_dump($arrayData));
+        //return $request->execute($arrayData);
     }
 
     public function disconnect()

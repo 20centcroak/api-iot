@@ -3,6 +3,9 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use Croak\Iot\Device;
+use Croak\Iot\Databases\DbManagement;
+use Croak\Iot\Exceptions\DataBaseException;
+use Croak\Iot\Measure;
 
 $app->get('/', function (Request $request, Response $response, $args) 
 {
@@ -13,46 +16,34 @@ $app->get('/', function (Request $request, Response $response, $args)
 
 $app->get('/devices/{sn}', function (Request $request, Response $response, $args) 
 {
-	$sn = (string)$args['sn'];
-    $this->logger->addInfo("get profile for ".$sn);
+	$id = (string)$args['sn'];
+    $this->logger->addInfo("get profile for ".$id);
 
-    $device = new Device($sn);
+    $device = new Device($sn, $id);
     $device->getID();
 
-    $response->getBody()->write("Hi ".$sn." !");
+    $response->getBody()->write("Hi ".$id." !");
 
     return $response;
 });
 
-
 $app->put('/devices/{sn}', function ($request, $response, $args) 
-{
-    
+{    
     $id = (string)$args['sn'];
     $this->logger->addInfo("put infos for ".$id);    
-    
-    // $filename = "../register/".$id."/temp.txt";
 
-    // if(!file_exists($filename)) 
-    // {
-    //     $response->getBody()->write("unknown device");
-    //     return $response;
-    // }
-
-    // $temp = fopen($filename,"a") or die("Unable to open file!");
-
-    // $this->logger->addInfo("file open successfully"); 
-
-    $dat = $request->getBody();
+    $json = $request->getBody();
     $this->logger->addInfo("dat = ".$dat);
-    $data = json_decode($dat);
 
-    $mesure = $data->{'temp'};
-    $this->logger->addInfo("mesure = ".$mesure); 
-
-
-
-    // fwrite($temp,$mesure."\n");
-    // fclose($temp);
+    $measure;
+    try{
+        $measure = Measure::create($json, $id);
+        $measure->populate();
+    }
+    catch(MeasureException $e){
+        $this->logger->addInfo($e->getMessage());
+        return;
+    }
+    $this->logger->addInfo("measure added correctly");
 
 });

@@ -1,2 +1,2 @@
 # api-iot
-demo of a simple iot using arduino ESP8266 module (nodeMCU1.0) and a REST API using slim framework
+demo of a simple REST api to manage connected devices. This API is based on slim framework.

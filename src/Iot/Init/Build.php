@@ -12,7 +12,7 @@ class Build{
 
     private function __construct(){}
 
-    public static function isBuilt()
+    public static function check()
     {        
         if(Build::initFileOk()){
             return true;
@@ -20,12 +20,11 @@ class Build{
 
         try{
             $init = Build::createTables();
+            return $init;
         }
-        catch(InitException $e){
-            return false;
-        }
-
-        return $init;
+        catch(DataBaseException $e){
+            throw new InitException(InitException::INIT_DB_NOT_AVAILABLE);
+        }       
     }
 
     private static function initFileOk(){
@@ -35,7 +34,7 @@ class Build{
         }
 
         $config = json_decode($json, true);
-        if(!$config[INIT_KEY]===true){
+        if(!$config[Build::INIT_KEY]===true){
             return false;
         }
 
@@ -54,20 +53,15 @@ class Build{
 
     public static function createTables()
     {
-        try{
-            $db = DbManagement::connect();
-        }
-        catch(DataBaseException $e){
-            throw new InitException(InitException::INIT_DB_NOT_AVAILABLE);
-        }
+        $db = DbManagement::connect();
 
-         $query="CREATE TABLE IF NOT EXISTS devices (
+        $query="CREATE TABLE IF NOT EXISTS devices (
             id            INTEGER         PRIMARY KEY AUTOINCREMENT,
-            sn            INTEGER,
+            sn            TEXT,
             created       TEXT,
             id_user       INTEGER
         );";
-        $errorDevices = $db->query($query);
+        $devicesCreated = $db->query($query);
 
         $query="CREATE TABLE IF NOT EXISTS users (
             id            INTEGER         PRIMARY KEY AUTOINCREMENT,
@@ -83,25 +77,27 @@ class Build{
             comments      TEXT,
             created       TEXT
         );";
-        $errorUsers = $db->query($query);
+        $usersCreated = $db->query($query);
 
        $query="CREATE TABLE IF NOT EXISTS measures (
             id            INTEGER         PRIMARY KEY AUTOINCREMENT,
-            id_device     INTEGER,
+            id_device     TEXT,
             type          TEXT,
             unit          TEXT,
             value         REAL,
             created       TEXT
         );";
-        $errorMeasures = $db->query($query);
+        $measuresCreated = $db->query($query);
 
-        if($errorDevices){
+        $db->disconnect();
+
+        if($devicesCreated===false){
             throw new InitException(InitException::INIT_TABLE_DEVICE_FAILED);
         }
-        if($errorUsers){
+        if($usersCreated===false){
             throw new InitException(InitException::INIT_TABLE_USER_FAILED);
         }
-        if($errorMeasures){
+        if($measuresCreated===false){
             throw new InitException(InitException::INIT_TABLE_MEASURE_FAILED);
         }
 
