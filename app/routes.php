@@ -5,6 +5,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 use Croak\Iot\Device;
 use Croak\Iot\Databases\DbManagement;
 use Croak\Iot\Exceptions\DataBaseException;
+use Croak\Iot\Exceptions\MeasureException;
 use Croak\Iot\Measure;
 
 $app->get('/', function (Request $request, Response $response, $args) 
@@ -42,8 +43,11 @@ $app->put('/devices/{sn}', function ($request, $response, $args)
     }
     catch(MeasureException $e){
         $this->logger->addInfo($e->getMessage());
-        return;
+        return $e->getMessage();
     }
-    $this->logger->addInfo("measure added correctly");
+
+    $success = "measure added correctly";
+    $this->logger->addInfo($success);
+    return $success;
 
 });

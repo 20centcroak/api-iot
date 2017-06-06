@@ -19,26 +19,22 @@ class Measure{
     private $date;
 
     private function __construct($data, $id){
-        print("\ntransferred array =");
-        print(var_dump($data));
         $this->date = date("Y-m-d H:i:s");
         $this->type = $data->{Measure::TYPE_KEY};
         $this->unit = $data->{Measure::UNIT_KEY}; 
         $this->value = $data->{Measure::VALUE_KEY}; 
         $this->id_device = $id;
-        print("\nvalue=".$this->value);
     }
 
     public static function create($json, $id){        
         $data = json_decode($json);
 
-        //print("\nvalue=".$data["value"]);
-        // if(!array_key_exists(TYPE_KEY) && !array_key_exists(UNIT_KEY) && !array_key_exists(VALUE_KEY)){
-        //     throw new MeasureException(MeasureException::MISSING_KEY);
-        // }
-        // if(!empty($data[TYPE_KEY]) && !empty($data[UNIT_KEY]) && !empty($data[VALUE_KEY])){
-        //     throw new MeasureException(MeasureException::MISSING_VALUE);
-        // }
+        if(!array_key_exists(Measure::TYPE_KEY, $data) || !array_key_exists(Measure::UNIT_KEY, $data) || !array_key_exists(Measure::VALUE_KEY, $data)){
+            throw new MeasureException(MeasureException::MISSING_KEY);
+        }
+        if(empty($data->{Measure::TYPE_KEY}) || empty($data->{Measure::UNIT_KEY}) || empty($data->{Measure::VALUE_KEY})){
+            throw new MeasureException(MeasureException::MISSING_VALUE);
+        }
 
         return new Measure($data, $id);
     }

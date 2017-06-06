@@ -29,8 +29,7 @@ class DbManagement
 
     public function query($query, $arrayData=array()){    
         $request = $this->pdo->prepare($query);
-        print("sent array : ".var_dump($arrayData));
-        //return $request->execute($arrayData);
+        return $request->execute($arrayData);
     }
 
     public function disconnect()
