@@ -10,7 +10,7 @@ Then the environment of a connected device can be split into 4 basic modules:
 * the hardware component able to detect via sensors, connect to a server and send data
 * a REST API (this project) able to manage input/output of data. This is a hub in which data transit. It dispatchs data according to requests
 * a database able to store data on a distant server
-* a GUI which display data and manage user interaction
+* a GUI which displays data and manages user interaction
 
 :information_source: see [arduino-iot](https://github.com/20centcroak/arduino-iot) project for a simple example of hardware connected device based on arduino.
 
@@ -25,6 +25,6 @@ The devices could be linked to a unique user by table relationship
 
 Testing the API could be easily done via curl or ARC (see tools for more information). Here are a few examples of curl commands to add data in the database:
 
-Add a measure of temperature in the database acquired with device SN 1234
+* Add a measure of temperature in the database acquired with device SN 1234
 
 `curl -v -H "Content-Type: application/json" -X PUT -d "{\"value\":28.5,\"type\":\"temperature\",\"unit\":\"°C\"}" http://localhost:8080/devices/1234`
