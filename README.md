@@ -1,7 +1,7 @@
 # api-iot
 Demo of a simple REST api to manage connected devices. This API is based on [Slim framework](https://www.slimframework.com/).
 
-See this list of [tools](https://github.com/20centcroak/api-iot/wiki/Tools) to start quickly. 
+See this list of [tools](https://github.com/20centcroak/api-iot/wiki/Tools) to start quickly and the [wiki pages](https://github.com/20centcroak/api-iot/wiki) for information concerning RESTFUL API, hosting your api, ...
 
 A connected device is generally a set of sensors which acquire and send data to a server which stores and link them.
 A graphical user interface (GUI) manage user interaction and display these data in a convenient way (with the ability to sort, filter and propose different views).
