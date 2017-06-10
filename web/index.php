@@ -31,7 +31,10 @@ catch(InitException $ie){
     catch(BuildException $be){
         $logger->addInfo($be->getMessage());
         return;
-    }     
+    }
+    if ($ie.getMessage()===InitException::CONFIG_FILE_NOT_FOUND){
+        Build::createInitFile();
+    }
 }
 
 $logger->addInfo("init ok");

@@ -2,6 +2,7 @@
 
 namespace Croak\Iot\Databases;
 use Croak\Iot\Exception\DataBaseException;
+use Croak\Iot\Databases\SqliteQueries;
 
 class TableDevices
 {
