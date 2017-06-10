@@ -1,7 +1,7 @@
 <?php
 
 namespace Croak\Iot\Databases;
-use Croak\Iot\Exceptions\DataBaseException;
+use Croak\Iot\Databases\Exceptions\DataBaseException;
 
 class DbManagement
 {
@@ -27,7 +27,8 @@ class DbManagement
         }
     }
 
-    public function query($query, $arrayData=array()){    
+    public function query($query, $arrayData=array())
+    {    
         $request = $this->pdo->prepare($query);
         return $request->execute($arrayData);
     }

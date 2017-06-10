@@ -2,20 +2,19 @@
 
 namespace Croak\Iot;
 use Croak\Iot\Exceptions\MeasureException;
-use Croak\Iot\Databases\DbManagement;
 
 class Measure{
 
     const TYPE_KEY = "type";
     const UNIT_KEY = "unit";
     const VALUE_KEY = "value";
-    const ID_DEVICE_KEY = "id_device";
+    const ID_DEVICE_KEY = "idDevice";
     const DATE_KEY = "created";
 
     private $type;
     private $unit;
     private $value;
-    private $id_device;
+    private $idDevice;
     private $date;
 
     private function __construct($data, $id){
@@ -23,7 +22,7 @@ class Measure{
         $this->type = $data->{Measure::TYPE_KEY};
         $this->unit = $data->{Measure::UNIT_KEY}; 
         $this->value = $data->{Measure::VALUE_KEY}; 
-        $this->id_device = $id;
+        $this->idDevice = $id;
     }
 
     public static function create($json, $id){        
@@ -39,27 +38,23 @@ class Measure{
         return new Measure($data, $id);
     }
 
-    public function populate(){
-        $query = "INSERT INTO measures (id_device, type, unit, value, created) VALUES (:id_device, :type, :unit, :value, :created)";
-        $array = array(
-            Measure::ID_DEVICE_KEY		=> $this->id_device,
-            Measure::TYPE_KEY			=> $this->type,
-            Measure::UNIT_KEY           => $this->unit,
-            Measure::VALUE_KEY			=> $this->value,
-            Measure::DATE_KEY		    => $this->date
-        );
-
-        try{
-            $db = DbManagement::connect();
-            $queryOk = $db->query($query, $array);
-            if($queryOk===false){
-                throw new MeasureException(MeasureException::ADD_FAILED);
-            }            
-        }
-        catch(DataBaseException $e){
-            throw new MeasureException(MeasureException::DB_CONNECTION_FAILED);
-        }
-        $db->disconnect();
+    public function getIdDevice(){
+        return $this->idDevice;
     }
 
+    public function getType(){
+        return $this->type;
+    }
+
+    public function getValue(){
+        return $this->value;
+    }
+
+    public function getUnit(){
+        return $this->unit;
+    }
+
+    public function getDate(){
+        return $this->date;
+    }
 }

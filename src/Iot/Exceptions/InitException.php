@@ -4,12 +4,10 @@ namespace Croak\Iot\Exceptions;
 
 class InitException extends \Exception
 {
-    const INIT_FILE_FAILED = "unable to update config file";
-    const INIT_TABLE_DEVICE_FAILED = "unable to create table DEVICES";
-    const INIT_TABLE_USER_FAILED = "unable to create table USERS";
-    const INIT_TABLE_MEASURE_FAILED = "unable to create table MEASURES";
-    const INIT_DB_NOT_AVAILABLE = "Database not available";
     const INIT_FAILED = "Init failed";
+    const CONFIG_FILE_NOT_FOUND = "Config file not found";
+    const CONFIG_FILE_ERROR = "Config file reading error";
+    const CONFIG_NOT_INITIALISED = "App not initialised";
 
     public function __construct($code)
     {

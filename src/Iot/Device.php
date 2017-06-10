@@ -1,7 +1,6 @@
 <?php
 
 namespace Croak\Iot;
-use Croak\Iot\Databases\DbDevices;
 
 class Device{
 
@@ -11,13 +10,8 @@ class Device{
         $this->sn = $sn;
     }
 
-    public function registerDevice(){
-        $dbDevices = DbDevices::connect();
-        $dbDevices->addDevice($sn);
-    }
-
     public function getID(){
-
+        return $this->sn;
     }
 
 }

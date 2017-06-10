@@ -14,18 +14,24 @@ require_once '../app/app.php';
 
 use Croak\Iot\Init\Build;
 use Croak\Iot\Exceptions\InitException;
+use Croak\Iot\Init\Config;
 
-$logger =$app->getContainer()->get('logger');
+$logger = $app->getContainer()->get('logger');
+$config;
 
 try{
-    if(!Build::check()){
-        $logger->addInfo("init failed");
-        return;
-    }
+    $config = Config::readConfigFile();
 }
-catch(InitException $e){
-     $logger->addInfo($e->getMessage());
-     return;
+catch(InitException $ie){
+     $logger->addInfo($ie->getMessage());
+
+    try{
+        Build::build();
+    }
+    catch(BuildException $be){
+        $logger->addInfo($be->getMessage());
+        return;
+    }     
 }
 
 $logger->addInfo("init ok");

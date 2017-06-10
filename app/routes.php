@@ -4,7 +4,8 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use Croak\Iot\Device;
 use Croak\Iot\Databases\DbManagement;
-use Croak\Iot\Exceptions\DataBaseException;
+use Croak\Iot\Databases\TableMeasures;
+use Croak\Iot\Databases\Exceptions\DataBaseException;
 use Croak\Iot\Exceptions\MeasureException;
 use Croak\Iot\Measure;
 
@@ -39,7 +40,8 @@ $app->put('/devices/{sn}', function ($request, $response, $args)
     $measure;
     try{
         $measure = Measure::create($json, $id);
-        $measure->populate();
+        $tableMeasures = new TableMeasures($measure);
+        $tableMeasures->populate();
     }
     catch(MeasureException $e){
         $this->logger->addInfo($e->getMessage());
