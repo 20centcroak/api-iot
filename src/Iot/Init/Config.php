@@ -12,13 +12,9 @@ class Config
     private $init;
     private $snPattern;
 
-    private function __construct($config)
-    {
-        $this->init = $config[Config::INIT_KEY];
-        $this->snPattern = $config[Config::SN_PATTERN];
-    }
+    public function __construct() { }
 
-    public static function readConfigFile()
+    public function readConfigFile()
     {
         if(!file_exists(Config::FILENAME)){
             throw new InitException(InitException::CONFIG_FILE_NOT_FOUND);
@@ -31,29 +27,32 @@ class Config
 
         $config = json_decode($json, true);
 
-        if(!$config[Config::INIT_KEY]===true){
+        $this->init = $config[Config::INIT_KEY];
+        $this->snPattern = $config[Config::SN_PATTERN];
+
+        if($this->init===false){
             throw new InitException(InitException::CONFIG_NOT_INITIALISED);
         }
-
-        return new Config($config);
     }
 
-    public static function setDefault(){
+    public function setDefault()
+    {
         $config = array();
-        $config[Config::INIT_KEY] = true;;
+        $config[Config::INIT_KEY] = false;
         $config[Config::SN_PATTERN] = "[0-9]{0,5}";
         return new Config($config);
     }
 
-    public function updateFile($json = getJson())
+    public function updateFile()
     {        
+        $json =  $this->getJson();
         $file = fopen(Config::FILENAME, 'w');
         if($file===false){
-            throw new BuildException(BuildException::CONFIG_FILE_CREATION_FAILED);
+            throw new InitException(InitException::CONFIG_FILE_CREATION_FAILED);
         }
         $bytes = fwrite($file, $json);
         if($bytes===false){
-            throw new BuildException(BuildException::CONFIG_FILE_CREATION_FAILED);
+            throw new InitException(InitException::CONFIG_FILE_CREATION_FAILED);
         }
         fclose($file);
     }
@@ -68,11 +67,11 @@ class Config
         return json_encode($array);
     }
 
-    public function setInit($initValue)
+    public function setInit()
     {
-        $this->init = $initValue;
+        $this->init = true;
     }
-    public function getInit()
+    public function isInit()
     {
         return $this->init;
     }

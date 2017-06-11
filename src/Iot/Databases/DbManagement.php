@@ -5,7 +5,8 @@ use Croak\Iot\Databases\Exceptions\DataBaseException;
 
 class DbManagement
 {
-    private const URL = 'sqlite:../db/iotDB.sqlite';
+    const DB_FOLDER = "../db";
+    private const URL = 'sqlite:'.DbManagement::DB_FOLDER.'/iotDB.sqlite';
     private $pdo;
 
     private function __construct($pdo)
@@ -23,7 +24,7 @@ class DbManagement
             return new DbManagement($pdo);
         }
         catch(\PDOException $e){
-            throw new DataBaseException();
+            throw new DataBaseException(DataBaseException::DB_CONNECTION_FAILED);
         }
     }
 
