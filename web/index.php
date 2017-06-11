@@ -1,13 +1,5 @@
 <?php
 
-//TODO voir pertinence de cela
-// exec("composer.phar update", $out, $ret);
-//         if(!$ret) {
-//             print("update ok");
-//         } else {
-//            print("update nok");
-//         }
-
 require_once '../vendor/autoload.php';
 require_once '../app/config/dev.php';
 require_once '../app/app.php';

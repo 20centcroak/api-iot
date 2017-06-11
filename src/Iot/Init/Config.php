@@ -39,7 +39,7 @@ class Config
     {
         $config = array();
         $config[Config::INIT_KEY] = false;
-        $config[Config::SN_PATTERN] = "[0-9]{0,5}";
+        $config[Config::SN_PATTERN] = "/[0-9]{0,5}/";
         return new Config($config);
     }
 

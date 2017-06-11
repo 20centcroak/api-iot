@@ -6,13 +6,11 @@ use Croak\Iot\Databases\SqliteQueries;
 
 class TableDevices
 {
-    private $_db;
+    private $device;
 
-    private function __construct($db)
+    public function __construct($device)
     {
-        //private constructor : building the object
-        //should be done by calling connect()
-        $this->_db = $db;
+        $this->device = $device;
     }
 
     public function addDevice($sn)
@@ -26,15 +24,18 @@ class TableDevices
                                 ));
     }
 
+    public function deviceExists()
+    {
+
+    }
+
+    public function updateDeviceInformation()
+    {
+
+    }
+
     public function associateUser($user)
     {
         DbUsers.connect();
     }
-
-    public function disconnect()
-    {
-      // close the database connection
-      $this->_db = NULL;
-    }
-
 }

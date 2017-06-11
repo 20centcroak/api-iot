@@ -2,6 +2,8 @@
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
+use Croak\Iot\Databases\TableDevices;
+use Croak\Iot\Exceptions\DeviceException;
 use Croak\Iot\Device;
 use Croak\Iot\Databases\DbManagement;
 use Croak\Iot\Databases\TableMeasures;
@@ -18,30 +20,35 @@ $app->get('/', function (Request $request, Response $response, $args)
 
 $app->get('/devices/{sn}', function (Request $request, Response $response, $args) 
 {
-	$id = (string)$args['sn'];
-    $this->logger->addInfo("get profile for ".$id);
+	$sn = (string)$args['sn'];
+    $this->logger->addInfo("get profile for ".$sn);
 
-    $device = new Device($sn, $id);
-    $device->getID();
+    $device = new Device($sn, $sn);
+    $device->getsn();
 
-    $response->getBody()->write("Hi ".$id." !");
+    $response->getBody()->write("Hi ".$sn." !");
 
     return $response;
 });
 
 $app->put('/devices/{sn}', function ($request, $response, $args) 
 {    
-    $id = (string)$args['sn'];
-    $this->logger->addInfo("put infos for ".$id);    
+    $sn = (string)$args['sn'];
+    $this->logger->addInfo("put infos for ".$sn);
 
-    $json = $request->getBody();
-    $this->logger->addInfo("dat = ".$dat);
-
+    $device;
     $measure;
     try{
-        $measure = Measure::create($json, $id);
+        $device = Device::create($sn, $config->getSnPattern());
+        $tableDevice = new TableDevices($device);
+        $json = $request->getBody();
+        $measure = Measure::create($json, $sn);
         $tableMeasures = new TableMeasures($measure);
         $tableMeasures->populate();
+    }
+    catch(DeviceException $e){
+        $this->logger->addInfo($e->getMessage());
+        return $e->getMessage();
     }
     catch(MeasureException $e){
         $this->logger->addInfo($e->getMessage());
@@ -51,5 +58,4 @@ $app->put('/devices/{sn}', function ($request, $response, $args)
     $success = "measure added correctly";
     $this->logger->addInfo($success);
     return $success;
-
 });
