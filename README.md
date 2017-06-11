@@ -1,7 +1,19 @@
 # api-iot
 Demo of a simple REST api to manage connected devices. This API is based on [Slim framework](https://www.slimframework.com/).
 
-See this list of [tools](https://github.com/20centcroak/api-iot/wiki/Tools) to start quickly and the [wiki pages](https://github.com/20centcroak/api-iot/wiki) for information concerning RESTFUL API, hosting your api, ...
+## Quick start
+See this list of [tools](https://github.com/20centcroak/api-iot/wiki/Tools) to start quickly
+* clone the project
+* run `composer install` in the directory containing composer.json
+* be sure that the `extension=php_pdo_sqlite.dll` in the php.ini file of your php installation is uncommented
+* run `php -S localhost:8080` in the "web" directory of the project
+* use one of the curl command below to test the api
+
+:information_source: the "api-config.json" allows a specific configuration of the api. So far, you can only change the format of device serial number.
+
+
+## The REST API for connected devices
+See the [wiki pages](https://github.com/20centcroak/api-iot/wiki) for information concerning RESTFUL API, hosting your api, ...
 
 A connected device is generally a set of sensors which acquire and send data to a server which stores and link them.
 A graphical user interface (GUI) manage user interaction and display these data in a convenient way (with the ability to sort, filter and propose different views).
