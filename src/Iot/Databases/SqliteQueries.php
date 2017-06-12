@@ -13,7 +13,8 @@ class SqliteQueries
                                     type          TEXT,
                                     unit          TEXT,
                                     value         REAL,
-                                    created       TEXT
+                                    created       TEXT,
+                                    UNIQUE(id)
                                 );";
     
     const CREATE_TABLE_USERS = "CREATE TABLE IF NOT EXISTS users (
@@ -28,15 +29,19 @@ class SqliteQueries
                                     address       TEXT,
                                     phoneNumber   TEXT,
                                     comments      TEXT,
-                                    created       TEXT
+                                    created       TEXT,
+                                    UNIQUE(id, email)
                             );";
 
     const CREATE_TABLE_DEVICES = "CREATE TABLE IF NOT EXISTS devices (
                                     id            INTEGER         PRIMARY KEY AUTOINCREMENT,
                                     sn            TEXT,
                                     created       TEXT,
-                                    idUser       INTEGER
+                                    idUser       INTEGER,
+                                    UNIQUE(id, sn)
                                 );";
+
+    const GET_DEVICE_BY_SN = "SELECT * FROM DEVICES WHERE sn = :sn";
 
 
     private function __construct($data, $id){}

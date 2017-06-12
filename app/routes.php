@@ -2,14 +2,10 @@
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
-use Croak\Iot\Databases\TableDevices;
+
 use Croak\Iot\Exceptions\DeviceException;
-use Croak\Iot\Device;
-use Croak\Iot\Databases\DbManagement;
-use Croak\Iot\Databases\TableMeasures;
-use Croak\Iot\Databases\Exceptions\DataBaseException;
 use Croak\Iot\Exceptions\MeasureException;
-use Croak\Iot\Measure;
+use Croak\Iot\Requests;
 
 $app->get('/', function (Request $request, Response $response, $args) 
 {
@@ -34,17 +30,10 @@ $app->get('/devices/{sn}', function (Request $request, Response $response, $args
 $app->put('/devices/{sn}', function ($request, $response, $args) 
 {    
     $sn = (string)$args['sn'];
-    $this->logger->addInfo("put infos for ".$sn);
+    $json = $request->getBody();
 
-    $device;
-    $measure;
     try{
-        $device = Device::create($sn, $config->getSnPattern());
-        $tableDevice = new TableDevices($device);
-        $json = $request->getBody();
-        $measure = Measure::create($json, $sn);
-        $tableMeasures = new TableMeasures($measure);
-        $tableMeasures->populate();
+        Requests::putMeasure($sn, $json, $config);
     }
     catch(DeviceException $e){
         $this->logger->addInfo($e->getMessage());

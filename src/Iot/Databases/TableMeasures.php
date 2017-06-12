@@ -5,15 +5,30 @@ use Croak\Iot\Exception\DataBaseException;
 use Croak\Iot\Databases\DbManagement;
 use Croak\Iot\Databases\SqliteQueries;
 
+/**
+ * Manages the table conatinaing the measures
+ */
 class TableMeasures
 {
+    /**
+    *@var Measure
+    */
     private $measure;
 
+    /**
+     * construct the object thanks to the definition of a measure object
+     * @param string $measure        the measure object defining a measurement
+     */
     public function __construct($measure)
     {
         $this->measure = $measure;
     }
 
+    /**
+     * add a measure to the measure table in the database
+     *
+     * @throws DataBaseException     error in connecting to the database
+     */
     public function populate()
     {
         $array = array(
@@ -24,15 +39,10 @@ class TableMeasures
             Measure::DATE_KEY		    => $this->measure->getDate()
         );
 
-        try{
-            $db = DbManagement::connect();
-            $queryOk = $db->query(SqliteQueries::ADD_MEASURE, $array);
-            if($queryOk===false){
-                throw new DataBaseException(DataBaseException::ADD_FAILED);
-            }            
-        }
-        catch(DataBaseException $e){
-            throw new DataBaseException(DataBaseException::DB_CONNECTION_FAILED);
+        $db = DbManagement::connect();
+        $queryOk = $db->query(SqliteQueries::ADD_MEASURE, $array);
+        if($queryOk===false){
+            throw new DataBaseException(DataBaseException::ADD_FAILED);
         }
         $db->disconnect();
     }
