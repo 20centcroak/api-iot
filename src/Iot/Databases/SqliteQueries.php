@@ -43,6 +43,8 @@ class SqliteQueries
 
     const GET_DEVICE_BY_SN = "SELECT * FROM DEVICES WHERE sn = :sn";
 
+    const ADD_DEVICE = "INSERT OR IGNORE INTO DEVICES (sn, created) VALUES (:sn, :created)";
+
 
     private function __construct($data, $id){}
 }
