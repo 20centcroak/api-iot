@@ -6,12 +6,12 @@ use Croak\Iot\Databases\DbManagement;
 use Croak\Iot\Databases\SqliteQueries;
 
 /**
- * Manages the table conatinaing the measures
+ * Manages the table containing the measures
  */
 class TableMeasures
 {
     /**
-    *@var Measure
+    *@var Measure       measure parameters
     */
     private $measure;
 
@@ -26,7 +26,6 @@ class TableMeasures
 
     /**
      * add a measure to the measure table in the database
-     *
      * @throws DataBaseException     error in connecting to the database
      */
     public function populate()

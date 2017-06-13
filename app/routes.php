@@ -27,6 +27,10 @@ $app->get('/devices/{sn}', function (Request $request, Response $response, $args
     return $response;
 });
 
+/** 
+* put measure in the database thanks to a PUT request with /devices/sn route
+* where sn should match a specific pattern set in the configuration file api-config.json
+*/
 $app->put('/devices/{sn}', function ($request, $response, $args) 
 {    
     $sn = (string)$args['sn'];

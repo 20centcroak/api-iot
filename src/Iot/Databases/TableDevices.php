@@ -10,14 +10,17 @@ use Croak\Iot\Databases\SqliteQueries;
 class TableDevices
 {
     /**
-    *@var Device
+    *@var Device    Device description
     */
     private $device;
+    /**
+    *@var String    serial number of device
+    */
     private $sn;
 
     /**
      * construct the object thanks to the definition of a device object
-     * @param string $device        the device object defining a device
+     * @param Device $device        the device object defining a device
      */
     public function __construct($device)
     {
@@ -27,7 +30,6 @@ class TableDevices
 
     /**
      * add a device to the device table in the database
-     *
      * @throws DataBaseException     error in connecting to the database
      */
     public function addDevice()
@@ -41,6 +43,10 @@ class TableDevices
         $db->disconnect();
     }
 
+    /**
+    * update device information from the database, using the device sn
+    * @throws DataBaseException if database access failed
+    */
     public function updateDeviceInformation()
     {
         $db = DbManagement::connect();
@@ -55,7 +61,11 @@ class TableDevices
         $this->device->update($json);
     }
 
-    public function associateUser($user)
+    /**
+    * associate a user with the device
+    * @param number $userId       the user id to associate with
+    */
+    public function associateUser($userId)
     {
         DbUsers.connect();
     }

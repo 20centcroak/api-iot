@@ -2,9 +2,14 @@
 
 namespace Croak\Iot\Databases;
 
-
+/**
+* a set of constants defining all the sqlite queries of the app
+*/
 class SqliteQueries
 {
+     /**
+    *@var String    all sqlite queries used in the app
+    */
     const ADD_MEASURE = "INSERT INTO measures (idDevice, type, unit, value, created) VALUES (:idDevice, :type, :unit, :value, :created)";
     
     const CREATE_TABLE_MEASURES = "CREATE TABLE IF NOT EXISTS measures (
@@ -45,6 +50,8 @@ class SqliteQueries
 
     const ADD_DEVICE = "INSERT OR IGNORE INTO DEVICES (sn, created) VALUES (:sn, :created)";
 
-
+    /**
+    * the constant should be accessed statically
+    */
     private function __construct($data, $id){}
 }
