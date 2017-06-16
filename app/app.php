@@ -1,6 +1,6 @@
 <?php
 
-$app = new \Slim\App(["settings" => $config]);
+$app = new \Slim\App(["settings" => $params]);
 
 $container = $app->getContainer();
 $container['logger'] = function($c) {

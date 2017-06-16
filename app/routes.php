@@ -3,9 +3,11 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
+use Croak\Iot\Exceptions\DataBaseException;
 use Croak\Iot\Exceptions\DeviceException;
 use Croak\Iot\Exceptions\MeasureException;
 use Croak\Iot\Requests;
+use Croak\Iot\Device;
 
 $app->get('/', function (Request $request, Response $response, $args) 
 {
@@ -19,12 +21,14 @@ $app->get('/devices/{sn}', function (Request $request, Response $response, $args
 	$sn = (string)$args['sn'];
     $this->logger->addInfo("get profile for ".$sn);
 
-    $device = new Device($sn, $sn);
-    $device->getsn();
+    try{
+       return Requests::getDevice($sn, $this->config);
+    }
+    catch(DeviceException $e){
+        $this->logger->addInfo($e->getMessage());
+        return $e->getMessage();
+    }
 
-    $response->getBody()->write("Hi ".$sn." !");
-
-    return $response;
 });
 
 /** 
@@ -44,6 +48,10 @@ $app->put('/devices/{sn}', function ($request, $response, $args)
         return $e->getMessage();
     }
     catch(MeasureException $e){
+        $this->logger->addInfo($e->getMessage());
+        return $e->getMessage();
+    }
+    catch(DataBaseException $e){
         $this->logger->addInfo($e->getMessage());
         return $e->getMessage();
     }

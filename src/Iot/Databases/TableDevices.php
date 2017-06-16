@@ -55,6 +55,8 @@ class TableDevices
         if($queryOk===false){
             throw new DataBaseException(DataBaseException::ADD_FAILED);
         }
+//TODO vérifier l'existence du device dans la base
+
         $db->disconnect();
 
         $json = json_encode($queryOk->fetchAll());
