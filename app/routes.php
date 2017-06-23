@@ -22,7 +22,8 @@ $app->get('/devices/{sn}', function (Request $request, Response $response, $args
     $this->logger->addInfo("get profile for ".$sn);
 
     try{
-       return Requests::getDevice($sn, $this->config);
+       $info = Requests::getDevice($sn, $this->config);
+       $response->getBody()->write($info." device found");
     }
     catch(DeviceException $e){
         $this->logger->addInfo($e->getMessage());

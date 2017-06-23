@@ -45,9 +45,9 @@ class DbManagement
         try{
             //open the database
             $pdo = new \PDO(DbManagement::URL);
-            $ok = $pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
-            $ok = $ok & $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $ok = $ok & $pdo->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_EMPTY_STRING);
+            $ok = $pdo->setAttribute(\PDO::ATTR_CASE, \PDO::CASE_NATURAL);
+            $ok = $ok & $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            $ok = $ok & $pdo->setAttribute(\PDO::ATTR_ORACLE_NULLS, \PDO::NULL_EMPTY_STRING);
             
             if(!$ok){
                 throw new DataBaseException(DataBaseException::DB_ATTRIBUTE_FAILED);
@@ -70,7 +70,11 @@ class DbManagement
     {    
         try{
             $request = $this->pdo->prepare($query);
-            return $request->execute($arrayData);
+            $ok = $request->execute($arrayData);
+            if(!$ok){
+                throw new DataBaseException(DataBaseException::EXECUTE_FAILED);
+            }
+            return $request->fetchAll();
         }
         catch(\PDOException $e){
             throw new DataBaseException(DataBaseException::PREPARE_FAILED);

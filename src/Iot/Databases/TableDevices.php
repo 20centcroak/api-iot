@@ -51,15 +51,13 @@ class TableDevices
     {
         $db = DbManagement::connect();
         $array = array('sn' => $this->sn);
-        $queryOk = $db->query(SqliteQueries::GET_DEVICE_BY_SN, $array);
-        if($queryOk===false){
-            throw new DataBaseException(DataBaseException::ADD_FAILED);
-        }
+        $answer = $db->query(SqliteQueries::GET_DEVICE_BY_SN, $array);
+
 //TODO vérifier l'existence du device dans la base
 
         $db->disconnect();
-
-        $json = json_encode($queryOk->fetchAll());
+        //TODO comprendre et changer cela
+        $json = json_encode($answer[0]);
         $this->device->update($json);
     }
 

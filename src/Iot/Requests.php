@@ -54,9 +54,8 @@ class Requests{
         $tableDevice->updateDeviceInformation();
 
         $deviceSn = $device->getSn();
-        $response->getBody()->write("Hi ".$deviceSn." !");
 
-        return $response;
+        return $deviceSn;
     }
 
 }

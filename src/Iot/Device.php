@@ -56,6 +56,7 @@ class Device{
     */
     public function update($json){
          $data = json_decode($json);
+         
 
         if(!array_key_exists(Device::SN_KEY, $data)){
             throw new DeviceException(DeviceException::MISSING_KEY);
