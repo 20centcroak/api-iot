@@ -9,9 +9,37 @@ use Croak\Iot\Exceptions\MeasureException;
 use Croak\Iot\Requests;
 use Croak\Iot\Device;
 
+$app->get('/intall', function (Request $request, Response $response, $args) 
+{
+    $this->logger->debug("accessing install page");
+    $response->getBody()->write("installation in progress !");
+
+    //build the app: create database and tables
+    try{
+        try{
+            Build::createInitFile($config);
+        }
+        catch(BuildException $be){
+            $logger->debug($be->getMessage());
+            return $be->getMessage();
+        }
+        catch(InitException $e){
+            $logger->debug($e->getMessage());
+            return $e->getMessage();
+        }
+        Build::build($config);
+    }
+    catch(BuildException $be){
+        $logger->debug($be->getMessage());
+        return $be->getMessage();
+    }
+
+    return $response;
+});
+
 $app->get('/', function (Request $request, Response $response, $args) 
 {
-    $this->logger->addInfo("accessing home page");
+    $this->logger->debug("accessing home page");
     $response->getBody()->write("Welcome !");
     return $response;
 });
@@ -19,14 +47,14 @@ $app->get('/', function (Request $request, Response $response, $args)
 $app->get('/devices/{sn}', function (Request $request, Response $response, $args) 
 {
 	$sn = (string)$args['sn'];
-    $this->logger->addInfo("get profile for ".$sn);
+    $this->logger->debug("get profile for ".$sn);
 
     try{
        $info = Requests::getDevice($sn, $this->config);
-       $response->getBody()->write($info." device found");
+       $response->getBody()->write($sn." device found, created on ".$info);
     }
     catch(DeviceException $e){
-        $this->logger->addInfo($e->getMessage());
+        $this->logger->debug($e->getMessage());
         return $e->getMessage();
     }
 
@@ -45,19 +73,19 @@ $app->put('/devices/{sn}', function ($request, $response, $args)
         Requests::putMeasure($sn, $json, $config);
     }
     catch(DeviceException $e){
-        $this->logger->addInfo($e->getMessage());
+        $this->logger->debug($e->getMessage());
         return $e->getMessage();
     }
     catch(MeasureException $e){
-        $this->logger->addInfo($e->getMessage());
+        $this->logger->debug($e->getMessage());
         return $e->getMessage();
     }
     catch(DataBaseException $e){
-        $this->logger->addInfo($e->getMessage());
+        $this->logger->debug($e->getMessage());
         return $e->getMessage();
     }
 
     $success = "measure added correctly";
-    $this->logger->addInfo($success);
+    $this->logger->debug($success);
     return $success;
 });

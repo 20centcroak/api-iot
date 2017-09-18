@@ -2,3 +2,4 @@ vendor/*
 logs/*
 db/*
 /api-config.json
+/.vscode

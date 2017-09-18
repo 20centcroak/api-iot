@@ -13,6 +13,7 @@ class Device{
     */
     const SN_KEY="sn";
     const NAME_KEY="name";
+    const CREATED_KEY="created";
 
     /**
     *@var String    serial number of device
@@ -22,6 +23,10 @@ class Device{
     *@var String    name of device
     */
     private $name;
+     /**
+    *@var String    date of creation of device
+    */
+    private $created;
 
     /** 
     * private constructor : building the object
@@ -67,6 +72,7 @@ class Device{
 
         $this->sn = $data->{Device::SN_KEY};
         $this->name = $data->{Device::NAME_KEY};
+        $this->created = $data->{Device::CREATED_KEY};
     }
 
     /** 
@@ -83,6 +89,14 @@ class Device{
     */
     public function getName(){
         return $this->name;
+    }
+
+    /** 
+    * getter of variable created
+    * @return String the creation date of the device
+    */
+    public function getCreated(){
+        return $this->created;
     }
 
 }

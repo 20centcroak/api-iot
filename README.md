@@ -7,6 +7,7 @@ See this list of [tools](https://github.com/20centcroak/api-iot/wiki/Tools) to s
 * run `composer install` in the directory containing composer.json
 * be sure that the `extension=php_pdo_sqlite.dll` in the php.ini file of your php installation is uncommented
 * run `php -S localhost:8080` in the "web" directory of the project
+* open your brower and enter the following adress: `http://localhost:8080/`, a "Welcome!" message should be displayed if everything is ok
 * use one of the curl command below to test the api
 
 :information_source: the "api-config.json" allows a specific configuration of the api. So far, you can only change the format of device serial number.

@@ -53,9 +53,9 @@ class Requests{
         $tableDevice = new TableDevices($device);   
         $tableDevice->updateDeviceInformation();
 
-        $deviceSn = $device->getSn();
+        $deviceDate = $device->getCreated();
 
-        return $deviceSn;
+        return $deviceDate;
     }
 
 }
