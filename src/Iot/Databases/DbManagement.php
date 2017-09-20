@@ -82,10 +82,6 @@ class DbManagement
         }
     }
 
-    public function getPdo(){
-        return $this->pdo;
-    }
-
     /**
     * 
     */

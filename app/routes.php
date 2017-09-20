@@ -1,6 +1,5 @@
 <?php
 
-
 use Croak\Iot\Controllers\RouteController;
 use Croak\Iot\Controllers\PutController;
 

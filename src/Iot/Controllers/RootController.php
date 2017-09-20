@@ -57,28 +57,4 @@ class RootController extends Controller
 
         return $this->success($response, $message);
     }
-
-    public function try(Request $request, Response $response){
-
-        try{
-            $db = DbManagement::connect();
-            //$pdo = $db->getPdo();
-        } catch(Exception $e) {
-            echo "Impossible d'accéder à la base de données SQLite : ".$e->getMessage();
-            die();
-        }
-
-        $query = "INSERT OR IGNORE INTO devices(sn, created) VALUES(:sn, :created)";
-        $array = array(
-                 'sn'			=> "894521",
-                 'created'		=> date("Y-m-d H:i:s")
-             );
-
-        $db->query($query, $array);
-
-        // $stmt = $pdo->prepare("INSERT OR IGNORE INTO devices(sn, created) VALUES(:sn, :created)");
-        // $result = $stmt->execute($array);
-
-    }
-
 }
