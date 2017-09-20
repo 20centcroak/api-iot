@@ -3,6 +3,7 @@
 namespace Croak\Iot\Databases;
 use Croak\Iot\Exception\DataBaseException;
 use Croak\Iot\Databases\SqliteQueries;
+use Croak\IoT\Device as Device;
 
 /**
  * Manages the table conatinaing the devices
@@ -22,7 +23,7 @@ class TableDevices
      * construct the object thanks to the definition of a device object
      * @param Device $device        the device object defining a device
      */
-    public function __construct($device)
+    public function __construct(Device $device)
     {
         $this->device = $device;
         $this->sn = $device->getSn();
@@ -35,12 +36,15 @@ class TableDevices
     public function addDevice()
     {
         $db = DbManagement::connect();
+        
         $array = array('sn'=> $this->sn,'created'=> date("Y-m-d H:i:s"));
         $queryOk = $db->query(SqliteQueries::ADD_DEVICE, $array);
+
         if($queryOk===false){
             throw new DataBaseException(DataBaseException::ADD_FAILED);
         }
         $db->disconnect();
+        
     }
 
     /**

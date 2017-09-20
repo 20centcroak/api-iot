@@ -1,11 +1,7 @@
 <?php
 
-//call dependency files
-require_once '../vendor/autoload.php';
-require_once '../app/app.php';
-
-//define routes
-require_once '../app/routes.php';
+require'../vendor/autoload.php';
+require '../app/app.php';
 
 //launch app
 $app->run();

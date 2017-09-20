@@ -4,6 +4,7 @@ namespace Croak\Iot\Databases;
 use Croak\Iot\Exception\DataBaseException;
 use Croak\Iot\Databases\DbManagement;
 use Croak\Iot\Databases\SqliteQueries;
+use Croak\Iot\Measure as Measure;
 
 /**
  * Manages the table containing the measures
@@ -19,7 +20,7 @@ class TableMeasures
      * construct the object thanks to the definition of a measure object
      * @param string $measure        the measure object defining a measurement
      */
-    public function __construct($measure)
+    public function __construct(Measure $measure)
     {
         $this->measure = $measure;
     }
@@ -39,6 +40,7 @@ class TableMeasures
         );
 
         $db = DbManagement::connect();
+
         $queryOk = $db->query(SqliteQueries::ADD_MEASURE, $array);
         if($queryOk===false){
             throw new DataBaseException(DataBaseException::ADD_FAILED);

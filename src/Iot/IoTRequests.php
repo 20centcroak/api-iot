@@ -11,7 +11,7 @@ use Croak\Iot\Measure;
 /**
  * Manages the requests addressed by the routes. 
  */
-class Requests{
+class IoTRequests{
 
     /**
      * Manages a new entry for measure associated with a given device
@@ -28,6 +28,7 @@ class Requests{
     public static function putMeasure($sn, $json, $config){
       
         $device = Device::create($sn, $config->getSnPattern());
+
         $tableDevice = new TableDevices($device); 
         $tableDevice->addDevice();
 

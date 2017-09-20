@@ -21,7 +21,7 @@ class Measure{
     const TYPE_KEY = "type";
     const UNIT_KEY = "unit";
     const VALUE_KEY = "value";
-    const ID_DEVICE_KEY = "idDevice";
+    const ID_DEVICE_KEY = "id_device";
     const DATE_KEY = "created";
 
     /**
@@ -48,14 +48,14 @@ class Measure{
     /** 
     * private constructor : building the object
     * should be done by calling create()
-    * @param mixed $data        the decoded json string 
+    * @param mixed $json        the decoded json string 
     * @param String $sn         the device sn associated with the measure
     */
-    private function __construct($data, $sn){
+    private function __construct($json, $sn){
         $this->date = date("Y-m-d H:i:s");
-        $this->type = $data->{Measure::TYPE_KEY};
-        $this->unit = $data->{Measure::UNIT_KEY}; 
-        $this->value = $data->{Measure::VALUE_KEY}; 
+        $this->type = $json[Measure::TYPE_KEY];
+        $this->unit = $json[Measure::UNIT_KEY]; 
+        $this->value = $json[Measure::VALUE_KEY]; 
         $this->snDevice = $sn;
     }
 
@@ -66,17 +66,17 @@ class Measure{
     * @return a new Measure Object
     * @throws MeasureException when a parameter for the measure object is missing in the json string
     */
-    public static function create($json, $sn){        
-        $data = json_decode($json);
+    public static function create($json, $sn){  
 
-        if(!array_key_exists(Measure::TYPE_KEY, $data) || !array_key_exists(Measure::UNIT_KEY, $data) || !array_key_exists(Measure::VALUE_KEY, $data)){
+        if(!array_key_exists(Measure::TYPE_KEY, $json) || !array_key_exists(Measure::UNIT_KEY, $json) || !array_key_exists(Measure::VALUE_KEY, $json)){
             throw new MeasureException(MeasureException::MISSING_KEY);
         }
-        if(empty($data->{Measure::TYPE_KEY}) || empty($data->{Measure::UNIT_KEY}) || empty($data->{Measure::VALUE_KEY})){
+
+        if(!isset($json[Measure::TYPE_KEY]) || !isset($json[Measure::UNIT_KEY]) || !isset($json[Measure::TYPE_KEY]) ){
             throw new MeasureException(MeasureException::MISSING_VALUE);
         }
 
-        return new Measure($data, $sn);
+        return new Measure($json, $sn);
     }
 
     /**

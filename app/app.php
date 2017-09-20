@@ -3,23 +3,13 @@
 use Croak\Iot\Init\Config;
 
 //main parameters of the Slim app
-$params['displayErrorDetails'] = true;
-$params['addContentLengthHeader'] = false;
+$settings = require __DIR__ . '/settings.php';
 
 //adding the settings to the app
-$app = new \Slim\App(["settings" => $params]);
+$app = new \Slim\App($settings);
 
-//definition of a Monolog logger for the app
-$logger = new \Monolog\Logger('my_logger');
-$file_handler = new \Monolog\Handler\StreamHandler("../logs/app.log",Monolog\Logger::DEBUG); //debug mode
-$logger->pushHandler($file_handler);
+// Set up dependencies
+require __DIR__ . '/dependencies.php';
 
-//adding resources to the Pimple container
-$container = $app->getContainer();
-$container['logger'] = $logger;
-
-$container['config'] = function($c) {
-    $config = new Config();
-    $config->readConfigFile();
-    return $config;
-};
+//define routes
+require __DIR__ . '/routes.php';

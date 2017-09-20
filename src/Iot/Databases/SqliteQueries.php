@@ -10,7 +10,7 @@ class SqliteQueries
      /**
     *@var String    all sqlite queries used in the app
     */
-    const ADD_MEASURE = "INSERT INTO measures (idDevice, type, unit, value, created) VALUES (:idDevice, :type, :unit, :value, :created)";
+    const ADD_MEASURE = "INSERT INTO measures(id_device, type, unit, value, created) VALUES(:id_device, :type, :unit, :value, :created)";
     
     const CREATE_TABLE_MEASURES = "CREATE TABLE IF NOT EXISTS measures (
                                     id            INTEGER         PRIMARY KEY AUTOINCREMENT,
@@ -46,9 +46,9 @@ class SqliteQueries
                                     UNIQUE(id, sn)
                                 );";
 
-    const GET_DEVICE_BY_SN = "SELECT * FROM DEVICES WHERE sn = :sn";
+    const GET_DEVICE_BY_SN = "SELECT * FROM devices WHERE sn = :sn";
 
-    const ADD_DEVICE = "INSERT OR IGNORE INTO DEVICES (sn, created) VALUES (:sn, :created)";
+    const ADD_DEVICE = "INSERT OR IGNORE INTO devices(sn, created) VALUES(:sn, :created)";
 
     /**
     * the constant should be accessed statically
