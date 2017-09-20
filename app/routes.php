@@ -2,27 +2,24 @@
 
 use Croak\Iot\Controllers\RouteController;
 use Croak\Iot\Controllers\PutController;
+use Croak\Iot\Controllers\GetController;
 
+/**
+* home page : displays api-IoT guide
+*/
 $app->get('/', \Croak\Iot\Controllers\RootController::class.':home');
+
+/**
+* install or repair the app thanks to a default set of configuration data
+* and in creating the missing databases
+*/
 $app->get('/install', \Croak\Iot\Controllers\RootController::class.':install');
-$app->get('/try', \Croak\Iot\Controllers\RootController::class.':try');
 
+/** 
+* get device information for device with the given serial number (sn)
+*/
+$app->get('/devices/{sn}', \Croak\Controllers\GetController::class.':getDevice');
 
-$app->get('/devices/{sn}', function (Request $request, Response $response, $args) 
-{
-	$sn = (string)$args['sn'];
-    $this->logger->debug("get profile for ".$sn);
-
-    try{
-       $info = Requests::getDevice($sn, $this->config);
-       $response->getBody()->write($sn." device found, created on ".$info);
-    }
-    catch(DeviceException $e){
-        $this->logger->debug($e->getMessage());
-        return $e->getMessage();
-    }
-
-});
 
 /** 
 * put measure in the database thanks to a PUT request with /devices/sn route

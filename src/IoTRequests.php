@@ -2,10 +2,8 @@
 
 namespace Croak\Iot;
 use Croak\Iot\Databases\TableDevices;
-use Croak\Iot\Exceptions\DeviceException;
 use Croak\Iot\Device;
 use Croak\Iot\Databases\TableMeasures;
-use Croak\Iot\Exceptions\MeasureException;
 use Croak\Iot\Measure;
 
 /**
@@ -52,11 +50,13 @@ class IoTRequests{
 
         $device = Device::create($sn, $config->getSnPattern());
         $tableDevice = new TableDevices($device);   
-        $tableDevice->updateDeviceInformation();
+        $deviceExists = $tableDevice->updateDeviceInformation();
 
-        $deviceDate = $device->getCreated();
-
-        return $deviceDate;
+        if(!$deviceExists){
+            $device = null;
+        }
+                
+        return $device;        
     }
 
 }

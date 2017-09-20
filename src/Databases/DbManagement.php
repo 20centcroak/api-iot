@@ -1,7 +1,7 @@
 <?php
 
 namespace Croak\Iot\Databases;
-use Croak\Iot\Databases\Exceptions\DataBaseException;
+use Croak\Iot\Exceptions\DataBaseException;
 
 /**
  * Manages the database: connection, read/write
@@ -75,7 +75,7 @@ class DbManagement
             if(!$ok){
                 throw new DataBaseException(DataBaseException::EXECUTE_FAILED);
             }
-            return $request->fetchAll();
+            return $request;
         }
         catch(\PDOException $e){
             throw new DataBaseException(DataBaseException::PREPARE_FAILED);

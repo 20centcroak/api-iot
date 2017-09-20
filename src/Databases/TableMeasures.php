@@ -40,11 +40,7 @@ class TableMeasures
         );
 
         $db = DbManagement::connect();
-
-        $queryOk = $db->query(SqliteQueries::ADD_MEASURE, $array);
-        if($queryOk===false){
-            throw new DataBaseException(DataBaseException::ADD_FAILED);
-        }
+        $db->query(SqliteQueries::ADD_MEASURE, $array);        
         $db->disconnect();
     }
 }

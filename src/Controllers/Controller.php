@@ -2,12 +2,13 @@
 namespace Croak\Iot\Controllers;
 
 use \Psr\Http\Message\ResponseInterface as Response;
+use \Slim\Container;
 
 class Controller
 {
     private $container;
 
-    public function __construct($container){
+    public function __construct(Container $container){
         $this->container = $container;
     }
 
@@ -33,6 +34,10 @@ class Controller
         $body = $response->getBody();
         $body->write($message);
         return $response->withStatus(200);
+    }
+
+    public function sendJson(Response $response, $data){
+        return $response->withJson($data, 201);
     }
 
     public function getConfig(){

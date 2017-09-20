@@ -1,6 +1,6 @@
 <?php
 
-namespace Croak\Iot\Databases\Exceptions;
+namespace Croak\Iot\Exceptions;
 
 /**
  * Exception sent when an error while connecting or reading/writing in the database occurs

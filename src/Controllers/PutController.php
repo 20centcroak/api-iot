@@ -3,10 +3,10 @@ namespace Croak\Iot\Controllers;
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
-use Croak\Iot\IoTRequests as IoTRequests;
+use Croak\Iot\IoTRequests;
 use Croak\Iot\Exceptions\DeviceException;
 use Croak\Iot\Exceptions\MeasureException;
-use Croak\Iot\Databases\Exceptions\DataBaseException;
+use Croak\Iot\Exceptions\DataBaseException;
 
 class PutController extends Controller
 {
@@ -14,10 +14,8 @@ class PutController extends Controller
         $sn = (string)$args['sn'];
         $json = $request->getParsedBody();
 
-        $config = $this->getConfig();
-
         try{
-            IoTRequests::putMeasure($sn, $json, $config);
+            IoTRequests::putMeasure($sn, $json, $this->getConfig());
         }
         catch(DeviceException $e){
             return $this->requestError($response, $e->getMessage());

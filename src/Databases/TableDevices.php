@@ -1,7 +1,7 @@
 <?php
 
 namespace Croak\Iot\Databases;
-use Croak\Iot\Exception\DataBaseException;
+
 use Croak\Iot\Databases\SqliteQueries;
 use Croak\IoT\Device as Device;
 
@@ -14,10 +14,7 @@ class TableDevices
     *@var Device    Device description
     */
     private $device;
-    /**
-    *@var String    serial number of device
-    */
-    private $sn;
+
 
     /**
      * construct the object thanks to the definition of a device object
@@ -26,43 +23,57 @@ class TableDevices
     public function __construct(Device $device)
     {
         $this->device = $device;
-        $this->sn = $device->getSn();
     }
 
     /**
      * add a device to the device table in the database
+     * @param $name [optional] name of the device
      * @throws DataBaseException     error in connecting to the database
      */
-    public function addDevice()
+    public function addDevice($name = "")
     {
-        $db = DbManagement::connect();
-        
-        $array = array('sn'=> $this->sn,'created'=> date("Y-m-d H:i:s"));
-        $queryOk = $db->query(SqliteQueries::ADD_DEVICE, $array);
+        $array = array(
+            Device::NAME_KEY=>$this->device->getName(),
+            Device::SN_KEY=> $this->device->getSn(),
+            Device::CREATED_KEY=> date("Y-m-d H:i:s")
+        );
 
-        if($queryOk===false){
-            throw new DataBaseException(DataBaseException::ADD_FAILED);
-        }
+        $db = DbManagement::connect();
+        $db->query(SqliteQueries::ADD_DEVICE, $array);
         $db->disconnect();
-        
+        $this->updateDeviceInformation();
     }
 
     /**
     * update device information from the database, using the device sn
     * @throws DataBaseException if database access failed
+    * @return true if the device exists in database and the device information has been updated, false othewise    *
     */
     public function updateDeviceInformation()
-    {
+    {        
+        $array = array(Device::SN_KEY => $this->device->getSn());
+
         $db = DbManagement::connect();
-        $array = array('sn' => $this->sn);
         $answer = $db->query(SqliteQueries::GET_DEVICE_BY_SN, $array);
-
-//TODO vérifier l'existence du device dans la base
-
         $db->disconnect();
-        //TODO comprendre et changer cela
-        $json = json_encode($answer[0]);
+        
+        $devices = [];
+        while ($row = $answer->fetch(\PDO::FETCH_ASSOC)) {
+            $devices[] = [
+                Device::NAME_KEY => $row[Device::NAME_KEY],
+                Device::SN_KEY => $row[Device::SN_KEY],
+                Device::CREATED_KEY => $row[Device::CREATED_KEY]
+            ];
+        }
+        
+        if (count($devices) >=1) {
+            $json = json_encode($devices[0]);
+        } else {
+            return false;
+        }
+
         $this->device->update($json);
+        return true;
     }
 
     /**

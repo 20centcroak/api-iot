@@ -2,7 +2,7 @@
 
 namespace Croak\Iot\Init;
 use Croak\Iot\Databases\DbManagement;
-use Croak\Iot\Databases\Exceptions\DataBaseException;
+use Croak\Iot\Exceptions\DataBaseException;
 use Croak\Iot\Databases\SqliteQueries;
 use Croak\Iot\Exceptions\BuildException;
 use Croak\Iot\Init\Config;

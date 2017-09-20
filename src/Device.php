@@ -1,12 +1,14 @@
 <?php
 
 namespace Croak\Iot;
+
 use Croak\Iot\Exceptions\DeviceException;
 
 /**
  * Describes a Device thanks to a set of parameters
  */
-class Device{
+class Device
+{
 
     /**
     *@var String    key names expected in json file
@@ -28,16 +30,17 @@ class Device{
     */
     private $created;
 
-    /** 
+    /**
     * private constructor : building the object
     * should be done by calling create()
     * @param String $sn       the serial number of the device
     */
-    private function __construct($sn){
+    private function __construct($sn)
+    {
         $this->sn = $sn;
     }
 
-    /** 
+    /**
     * build the Device Object if the device sn is matching the specified pattern
     * The specified pattern is set in the configuratiuon file api-config.json
     * @param String $sn                     the serial number of the device
@@ -47,26 +50,26 @@ class Device{
     */
     public static function create($sn, $snPattern)
     {
-        if (!preg_match($snPattern, $sn)){
+        if (!preg_match($snPattern, $sn)) {
             throw new DeviceException(DeviceException::DEVICE_SN);
         }
 
         return new Device($sn);
     }
 
-    /** 
+    /**
     * update the device parameters
     * @param Json $json             the json String containing new parameters
     * @throws DeviceException       essential key or value are missing in the json file
     */
-    public function update($json){
-         $data = json_decode($json);
-         
+    public function update($json)
+    {
+         $data = json_decode($json);         
 
-        if(!array_key_exists(Device::SN_KEY, $data)){
+        if (!array_key_exists(Device::SN_KEY, $data)) {
             throw new DeviceException(DeviceException::MISSING_KEY);
         }
-        if(empty($data->{Device::SN_KEY})){
+        if (empty($data->{Device::SN_KEY})) {
             throw new DeviceException(DeviceException::MISSING_VALUE);
         }
 
@@ -75,28 +78,45 @@ class Device{
         $this->created = $data->{Device::CREATED_KEY};
     }
 
-    /** 
+    /**
     * getter of variable SN
     * @return String the device sn
     */
-    public function getSn(){
+    public function getSn()
+    {
         return $this->sn;
     }
 
-    /** 
+    /**
     * getter of variable name
     * @return String the device name
     */
-    public function getName(){
+    public function getName()
+    {
         return $this->name;
     }
 
-    /** 
+    /**
     * getter of variable created
     * @return String the creation date of the device
     */
-    public function getCreated(){
+    public function getCreated()
+    {
         return $this->created;
     }
 
+    /**
+    *getter of all data for the device
+    *@return all data concerning the device in an array
+    */
+    public function getAllData()
+    {
+        $array = array(
+            Device::SN_KEY=> $this->sn,
+            Device::CREATED_KEY=> $this->created,
+            Device::NAME_KEY=> $this->name
+        );
+
+        return $array;
+    }
 }
