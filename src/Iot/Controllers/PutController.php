@@ -8,8 +8,18 @@ use Croak\Iot\Exceptions\DeviceException;
 use Croak\Iot\Exceptions\MeasureException;
 use Croak\Iot\Exceptions\DataBaseException;
 
+/**
+* Controller for routes based on "PUT" requests
+*/
 class PutController extends Controller
 {
+    /**
+    * add measure in the database
+    * @param \Psr\Http\Message\ServerRequestInterface $request
+    * @param \Psr\Http\Message\ResponseInterface $response
+    * @param array args request arguments
+    * @return a http response indicating if the measure has been correctly added or not
+    */
     public function putMeasure(Request $request, Response $response, $args){    
         $sn = (string)$args['sn'];
         $json = $request->getParsedBody();

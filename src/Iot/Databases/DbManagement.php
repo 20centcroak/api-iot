@@ -36,8 +36,7 @@ class DbManagement
     /** 
     * build the DbManagement Object if connection to the database is ok
     *the database reference is define by the constants URL and 
-    * @param PDO $pdo               the pdo object built in connect() function
-    * @return DbManagement          the created DbManagement object
+    * @return \Croak\Iot\DatabasesDbManagement          the created DbManagement object
     * @throws DataBaseException     error in connecting to the database
     */
     public static function connect()
@@ -63,11 +62,11 @@ class DbManagement
     /** 
     * prepares and execute a query given as a parameter
     * @param String $query          a query to access data in the database
-    * @param array $arrayData       an array containing values to insert in the request
-    * @throws PDOException          if an error occured when preparing the request
+    * @param array $arrayData       an array containing values to insert in the query
+    * @throws Croak\Iot\Exceptions\DataBaseException    if an error occured when preparing or executing the query
+    * @return the result of the query
     */
-    public function query($query, $arrayData=array())
-    {    
+    public function query($query, $arrayData=array())  {
 
         try{
             $request = $this->pdo->prepare($query);
@@ -83,11 +82,9 @@ class DbManagement
     }
 
     /**
-    * 
+    * close the database connection
     */
-    public function disconnect()
-    {
-      // close the database connection
+    public function disconnect(){
       $this->pdo = NULL;
     }
 

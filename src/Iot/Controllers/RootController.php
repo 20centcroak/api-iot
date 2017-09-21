@@ -8,8 +8,17 @@ use Croak\Iot\Exceptions\BuildException as BuildException;
 use Croak\Iot\Exceptions\InitException as InitException;
 use  Croak\Iot\Databases\DbManagement as DbManagement;
 
+/**
+* controller for specific requests (installation, home page)
+*/
 class RootController extends Controller
 {
+    /**
+    * displays home page
+    * @param \Psr\Http\Message\ServerRequestInterface $request
+    * @param \Psr\Http\Message\ResponseInterface $response
+    * @return a http response with home page content
+    */
     public function home(Request $request, Response $response){
         $this->debug("accessing home page");
 
@@ -24,12 +33,14 @@ class RootController extends Controller
         return $response;
     }
 
+    /**
+    * installs all environment for app : default config file, tables, ...
+    * if installation has already be done, install can repair defects but won't reinstall or delete existing
+    * @param \Psr\Http\Message\ServerRequestInterface $request
+    * @param \Psr\Http\Message\ResponseInterface $response
+    * @return a http response indicating if installation is successfull or not
+    */
     public function install(Request $request, Response $response){
-
-        //cette fonction ne doit être appelée qu'une seule fois pour permettre l'initialisation de l'API
-        //sur le serveur. Si l'installation a déjà été réalisée, elle peut réparer les erreurs mais ne 
-        //supprimera pas l'existant
-
 
         $this->debug("accessing install page");        
         $message = "installation failed, ";

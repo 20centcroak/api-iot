@@ -5,7 +5,8 @@ use \Psr\Http\Message\ResponseInterface as Response;
 use \Slim\Container;
 
 /**
-* base Controller for all controlers*/
+* base Controller for all controlers
+*/
 class Controller
 {
     /**
@@ -26,13 +27,14 @@ class Controller
     * @param String $message message to log
     */
     public function debug($message){
-        return $this->container->logger->debug($message);
+        $this->container->logger->debug($message);
     }
 
     /**
     * returns a server error due to an issue with the server or the app
     * @param \Psr\Http\Message\ResponseInterface $response the response interface
     * @param String $message a message to add in the body
+    * @return \Psr\Http\Message\ResponseInterface
     */
     public function serverError(Response $response, $message){
         $this->debug($message);
@@ -42,7 +44,10 @@ class Controller
     }
 
     /**
-    * re
+    * returns a http response with a 400 status. The request was not accepted
+    * @param \Psr\Http\Message\ResponseInterface $response the response interface
+    * @param String $message a message to add in the body
+    * @return \Psr\Http\Message\ResponseInterface
     */
     public function requestError(Response $response, $message){
         $this->debug($message);
@@ -51,16 +56,32 @@ class Controller
         return $response->withStatus(400);
     }
 
+    /**
+    * returns a http response with a 200 status. The request was accepted
+    * @param \Psr\Http\Message\ResponseInterface $response the response interface
+    * @param String $message a message to add in the body
+    * @return \Psr\Http\Message\ResponseInterface
+    */
     public function success(Response $response, $message){
         $body = $response->getBody();
         $body->write($message);
         return $response->withStatus(200);
     }
 
+    /**
+    * returns a response with a json file containing the query answer.
+    * @param \Psr\Http\Message\ResponseInterface $response the response interface
+    * @param array $data an array containing the data to be sent via json
+    * @return \Psr\Http\Message\ResponseInterface
+    */
     public function sendJson(Response $response, $data){
         return $response->withJson($data, 201);
     }
 
+    /**
+    * getter for the app config
+    * return \Croak\Iot\Init\Config
+    */
     public function getConfig(){
         return $this->container->config;
     }

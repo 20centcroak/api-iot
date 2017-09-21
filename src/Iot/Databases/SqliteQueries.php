@@ -40,6 +40,7 @@ class SqliteQueries
     const CREATE_TABLE_DEVICES = "CREATE TABLE IF NOT EXISTS devices (
                                     id            INTEGER         PRIMARY KEY AUTOINCREMENT,
                                     sn            TEXT,
+                                    name          TEXT,
                                     created       TEXT,
                                     idUser       INTEGER,
                                     UNIQUE(id, sn)
@@ -47,7 +48,7 @@ class SqliteQueries
 
     const GET_DEVICE_BY_SN = "SELECT * FROM devices WHERE sn = :sn";
 
-    const ADD_DEVICE = "INSERT OR IGNORE INTO devices(sn, created) VALUES(:sn, :created)";
+    const ADD_DEVICE = "INSERT OR IGNORE INTO devices(sn, name, created) VALUES(:sn, :name, :created)";
 
     const ADD_MEASURE = "INSERT INTO measures(id_device, type, unit, value, created) VALUES(:id_device, :type, :unit, :value, :created)";
     

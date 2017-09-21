@@ -18,7 +18,7 @@ $app->get('/install', \Croak\Iot\Controllers\RootController::class.':install');
 /** 
 * get device information for device with the given serial number (sn)
 */
-$app->get('/devices/{sn}', \Croak\Controllers\GetController::class.':getDevice');
+$app->get('/devices/{sn}', \Croak\Iot\Controllers\GetController::class.':getDevice');
 
 
 /** 
