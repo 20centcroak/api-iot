@@ -40,4 +40,8 @@ Testing the API could be easily done via curl or ARC (see tools for more informa
 
 * Add a measure of temperature in the database acquired with device SN 1234
 
-`curl -v -H "Content-Type: application/json" -X PUT -d "{\"value\":28.5,\"type\":\"temperature\",\"unit\":\"°C\"}" http://localhost:8080/devices/1234`
+`curl -v -H "Content-Type: application/json" -X POST -d "{\"value\":28.5,\"type\":\"temperature\",\"unit\":\"K\"}" http://localhost:8080/devices/1234/measures`
+
+* get device information
+http://localhost:8080/devices/1234
+

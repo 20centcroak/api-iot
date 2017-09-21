@@ -9,9 +9,9 @@ use Croak\Iot\Exceptions\MeasureException;
 use Croak\Iot\Exceptions\DataBaseException;
 
 /**
-* Controller for routes based on "PUT" requests
+* Controller for routes based on "POST" requests
 */
-class PutController extends Controller
+class PostController extends Controller
 {
     /**
     * add measure in the database
@@ -20,12 +20,13 @@ class PutController extends Controller
     * @param array args request arguments
     * @return a http response indicating if the measure has been correctly added or not
     */
-    public function putMeasure(Request $request, Response $response, $args){    
+    public function postMeasure(Request $request, Response $response, $args){    
         $sn = (string)$args['sn'];
         $json = $request->getParsedBody();
+        $url = $request->getUri();
 
         try{
-            IoTRequests::putMeasure($sn, $json, $this->getConfig());
+            $id = IoTRequests::putMeasure($sn, $json, $this->getConfig());
         }
         catch(DeviceException $e){
             return $this->requestError($response, $e->getMessage());
@@ -37,7 +38,8 @@ class PutController extends Controller
             return $this->serverError($response, $e->getMessage());
         }
 
-        $message = "measure added correctly";
-        return $this->success($response, $message);
+        $location = $url.'/'.$id;
+        $message = "measure added successfully";
+        return $this->createSuccess($response, $location, $message);
     }
 }

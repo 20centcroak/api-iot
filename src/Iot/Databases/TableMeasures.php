@@ -28,6 +28,7 @@ class TableMeasures
     /**
      * add a measure to the measure table in the database
      * @throws DataBaseException     error in connecting to the database
+     * @return id of the record
      */
     public function populate()
     {
@@ -40,7 +41,10 @@ class TableMeasures
         );
 
         $db = DbManagement::connect();
-        $db->query(SqliteQueries::ADD_MEASURE, $array);        
+        $db->query(SqliteQueries::ADD_MEASURE, $array);
+        $id = $db->lastInsertId();
+       
         $db->disconnect();
+        return $id;
     }
 }

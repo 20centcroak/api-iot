@@ -36,7 +36,7 @@ class DbManagement
     /** 
     * build the DbManagement Object if connection to the database is ok
     *the database reference is define by the constants URL and 
-    * @return \Croak\Iot\DatabasesDbManagement          the created DbManagement object
+    * @return \Croak\Iot\Databases\DbManagement          the created DbManagement object
     * @throws DataBaseException     error in connecting to the database
     */
     public static function connect()
@@ -86,6 +86,14 @@ class DbManagement
     */
     public function disconnect(){
       $this->pdo = NULL;
+    }
+
+    /**
+    * returns the last inserted id
+    * @return int
+    */
+    public function lastInsertId(){
+        return $this->pdo->lastInsertId();
     }
 
 }

@@ -20,9 +20,18 @@ $app->get('/install', \Croak\Iot\Controllers\RootController::class.':install');
 */
 $app->get('/devices/{sn}', \Croak\Iot\Controllers\GetController::class.':getDevice');
 
+/** 
+* get measures for the device identified with the given serial number (sn)
+*/
+// $app->get('/devices/{sn}', \Croak\Iot\Controllers\GetController::class.':getDevice');
 
 /** 
 * put measure in the database thanks to a PUT request with /devices/sn route
 * where sn should match a specific pattern set in the configuration file api-config.json
+*
+* if device does not exist, it will be automatically created **** THIS SHOULD BE MODIFIED*****
+* we should avoid bombing by creating a lot of devices or measures
+* configuration of the app should control the way the tables are accessed
+* the use of tokens is recommended: see here https://www.slimframework.com/docs/features/csrf.html
 */
-$app->put('/devices/{sn}', \Croak\Iot\Controllers\PutController::class.':putMeasure');
+$app->post('/devices/{sn}/measures', \Croak\Iot\Controllers\PostController::class.':postMeasure');

@@ -33,7 +33,7 @@ class IoTRequests{
         $measure;
         $measure = Measure::create($json, $sn);
         $tableMeasures = new TableMeasures($measure);
-        $tableMeasures->populate();
+        return $tableMeasures->populate();
     }
 
     /**

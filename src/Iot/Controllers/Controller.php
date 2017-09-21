@@ -69,6 +69,18 @@ class Controller
     }
 
     /**
+    * returns a http response with a 201 status. The request has been created
+    * @param \Psr\Http\Message\ResponseInterface $response the response interface
+    * @param String $address the address location to return in body
+    * @return \Psr\Http\Message\ResponseInterface
+    */
+    public function createSuccess(Response $response, $address, $message){
+        $body = $response->getBody();
+        $body->write($message);
+        return $response->withStatus(201)->withHeader('Location',$address);
+    }
+
+    /**
     * returns a response with a json file containing the query answer.
     * @param \Psr\Http\Message\ResponseInterface $response the response interface
     * @param array $data an array containing the data to be sent via json
