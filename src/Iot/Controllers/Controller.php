@@ -1,8 +1,9 @@
 <?php
 namespace Croak\Iot\Controllers;
 
-use \Psr\Http\Message\ResponseInterface as Response;
-use \Slim\Container;
+use Psr\Http\Message\ResponseInterface as Response;
+use Croak\Iot\Databases\DbManagement;
+use Slim\Container;
 
 /**
 * base Controller for all controlers
@@ -82,9 +83,9 @@ class Controller
 
     /**
     * returns a response with a json file containing the query answer.
-    * @param \Psr\Http\Message\ResponseInterface $response the response interface
+    * @param Psr\Http\Message\ResponseInterface $response the response interface
     * @param array $data an array containing the data to be sent via json
-    * @return \Psr\Http\Message\ResponseInterface
+    * @return Psr\Http\Message\ResponseInterface
     */
     public function sendJson(Response $response, $data){
         return $response->withJson($data, 201);
@@ -92,11 +93,23 @@ class Controller
 
     /**
     * getter for the app config
-    * return \Croak\Iot\Init\Config
+    * @return Croak\Iot\Init\Config
+    * @throws Croak\Iot\Exception\InitException
     */
     public function getConfig(){
         return $this->container->config;
     }
 
+    /**
+    * getter for the database
+    * @return Croak\Iot\DataBases\Config
+    * @throws Croak\Iot\Exception\DataBaseException
+    */
+    public function getDataBase(){
+        $db = $this->container->database;
+        $url = $this->container->config->getDbUrl();
+        $db->connect($url);
+        return $db;
+    }
 
 }

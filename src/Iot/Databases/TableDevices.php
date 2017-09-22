@@ -3,7 +3,8 @@
 namespace Croak\Iot\Databases;
 
 use Croak\Iot\Databases\SqliteQueries;
-use Croak\IoT\Device as Device;
+use Croak\IoT\Device;
+use Croak\Iot\Databases\DbManagement;
 
 /**
  * Manages the table conatinaing the devices
@@ -27,10 +28,11 @@ class TableDevices
 
     /**
      * add a device to the device table in the database
+     * @param Croak\Iot\Databases\DbManagement $db the database connector
      * @param $name [optional] name of the device
      * @throws DataBaseException     error in connecting to the database
      */
-    public function addDevice($name = "")
+    public function addDevice(DbManagement $db, $name = "")
     {
         $array = array(
             Device::NAME_KEY=>$this->device->getName(),
@@ -38,24 +40,21 @@ class TableDevices
             Device::CREATED_KEY=> date("Y-m-d H:i:s")
         );
 
-        $db = DbManagement::connect();
         $db->query(SqliteQueries::ADD_DEVICE, $array);
-        $db->disconnect();
-        $this->updateDeviceInformation();
+        $this->updateDeviceInformation($db);
     }
 
     /**
     * update device information from the database, using the device sn
+    * @param Croak\Iot\Databases\DbManagement $db the database connector
     * @throws DataBaseException if database access failed
     * @return true if the device exists in database and the device information has been updated, false othewise    *
     */
-    public function updateDeviceInformation()
+    public function updateDeviceInformation(DbManagement $db)
     {        
         $array = array(Device::SN_KEY => $this->device->getSn());
 
-        $db = DbManagement::connect();
         $answer = $db->query(SqliteQueries::GET_DEVICE_BY_SN, $array);
-        $db->disconnect();
         
         $devices = [];
         while ($row = $answer->fetch(\PDO::FETCH_ASSOC)) {
@@ -82,6 +81,6 @@ class TableDevices
     */
     public function associateUser($userId)
     {
-        DbUsers.connect();
+        #TODO
     }
 }

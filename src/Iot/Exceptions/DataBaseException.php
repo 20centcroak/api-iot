@@ -11,9 +11,10 @@ class DataBaseException extends \Exception
     *@var String    error description
     */
     const DB_CONNECTION_FAILED = "Database is not available, check if line 'extension=php_pdo_sqlite.dll' in php.ini is uncommented";
-    const ADD_FAILED = "adding data in database has failed";
-    const PREPARE_FAILED = "PDO prepare failed";
-    const DB_ATTRIBUTE_FAILED = "failed to defined attributes for the pdo object";
+    const ADD_FAILED = "Adding data in database has failed";
+    const QUERY_FAILED = "Query is not as expected";
+    const QUERY_EXECUTION_FAILED = "Query execution has failed";
+    const DB_SETTINGS_FAILED = "Failed to defined settings for database";
 
     /**
      * construct the object thanks to a code value (one of the const above)

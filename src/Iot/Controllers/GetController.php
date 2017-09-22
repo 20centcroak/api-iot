@@ -4,9 +4,10 @@ namespace Croak\Iot\Controllers;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use Croak\Iot\IoTRequests as IoTRequests;
-use Croak\Iot\Exceptions\DeviceException as DeviceException;
-use Croak\Iot\Exceptions\DataBaseException as DataBaseException;
-use Croak\Iot\Device as Device;
+use Croak\Iot\Exceptions\DeviceException;
+use Croak\Iot\Exceptions\DataBaseException;
+use Croak\Iot\Exceptions\InitException;
+use Croak\Iot\Device;
 
 /**
 * Controller for routes based on "GET" requests
@@ -26,7 +27,7 @@ class GetController extends Controller
         $this->debug("get profile for $sn");
 
         try{
-            $device = IoTRequests::getDevice($sn, $this->getConfig());
+            $device = IoTRequests::getDevice($sn, $this->getConfig(), $this->getDataBase());
             if($device==null){
                 return $this->requestError($response, "device sn does not exist");
             }
@@ -37,6 +38,9 @@ class GetController extends Controller
             return $this->requestError($response, $e->getMessage());
         }
         catch(DatabaseException $e){
+            return $this->requestError($response, $e->getMessage());
+        }
+        catch(InitException $e){
             return $this->requestError($response, $e->getMessage());
         }
 

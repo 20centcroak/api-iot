@@ -5,6 +5,7 @@ use Croak\Iot\Databases\TableDevices;
 use Croak\Iot\Device;
 use Croak\Iot\Databases\TableMeasures;
 use Croak\Iot\Measure;
+use Croak\Iot\Databases\DbManagement;
 
 /**
  * Manages the requests addressed by the routes. 
@@ -23,17 +24,20 @@ class IoTRequests{
      * @throws MeasureException     Error on the passed key/value  pair for measure
      * @throws DataBaseException    Error while connecting to the database
      */
-    public static function putMeasure($sn, $json, $config){
+    public static function putMeasure($sn, $json, $config, DbManagement $db){
       
         $device = Device::create($sn, $config->getSnPattern());
 
         $tableDevice = new TableDevices($device); 
-        $tableDevice->addDevice();
+        $tableDevice->addDevice($db);
 
         $measure;
         $measure = Measure::create($json, $sn);
         $tableMeasures = new TableMeasures($measure);
-        return $tableMeasures->populate();
+        $id = $tableMeasures->populate($db);
+
+        $db->disconnect();
+        return $id;
     }
 
     /**
@@ -42,15 +46,16 @@ class IoTRequests{
      *
      * @param string $sn            the device sn
      * @param Config $config        the configuration of the app
-     *
+     * @param Croak\Iot\Databases\DbManagement $db the database connector
      * @throws DeviceException      The device does not comply with SnPattern in api-config.json or does not exist
      * @throws DataBaseException    Error while connecting to the database
      */
-    public static function getDevice($sn, $config){
+    public static function getDevice($sn, $config, $db){
 
         $device = Device::create($sn, $config->getSnPattern());
         $tableDevice = new TableDevices($device);   
-        $deviceExists = $tableDevice->updateDeviceInformation();
+        $deviceExists = $tableDevice->updateDeviceInformation($db);
+        $db->disconnect();
 
         if(!$deviceExists){
             $device = null;

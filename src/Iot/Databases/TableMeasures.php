@@ -27,10 +27,11 @@ class TableMeasures
 
     /**
      * add a measure to the measure table in the database
+     * @param Croak\Iot\Databases\DbManagement $db the database connector
      * @throws DataBaseException     error in connecting to the database
      * @return id of the record
      */
-    public function populate()
+    public function populate(DbManagement $db)
     {
         $array = array(
             Measure::ID_DEVICE_KEY		=> $this->measure->getIdDevice(),
@@ -40,11 +41,7 @@ class TableMeasures
             Measure::DATE_KEY		    => $this->measure->getDate()
         );
 
-        $db = DbManagement::connect();
         $db->query(SqliteQueries::ADD_MEASURE, $array);
-        $id = $db->lastInsertId();
-       
-        $db->disconnect();
-        return $id;
+        return $db->lastInsertId();
     }
 }

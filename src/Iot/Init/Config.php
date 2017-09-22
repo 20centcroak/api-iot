@@ -8,30 +8,38 @@ use Croak\Iot\Exceptions\InitException;
  */
 class Config
 {
-    const FILENAME = "../api-config.json";
+    const FILENAME = "api-config.json";
     const INIT_KEY = "init";
     const SN_PATTERN = "snPattern";
+    const DATABASE_URL = 'databaseUrl';
 
     private $init;
     private $snPattern;
+    private $db_url;
+    private $root;
+    private $configFileName;
 
     /**
-    * the Object is built whithout any parameters
+    * the Object is built whith the rootpath of the app folder as a reference
     */
-    public function __construct() { }
+    public function __construct($rootpath) 
+    {
+        $this->root = $rootpath;
+        $this->configFileName = $this->root.'/'.Config::FILENAME;
+     }
 
     /**
      * read the configuration file and extract the parameters to be used by the app
-     *
+     * @return boolean true if init is set to true, false otherwise
      * @throws InitException        when an error occured when reading the configuration file
      */
     public function readConfigFile()
     {
-        if(!file_exists(Config::FILENAME)){
+        if(!file_exists($this->configFileName)){
             throw new InitException(InitException::CONFIG_FILE_NOT_FOUND);
         }
 
-        $json = file_get_contents(Config::FILENAME);
+        $json = file_get_contents($this->configFileName);
         if($json===false){
             throw new InitException(InitException::CONFIG_FILE_ERROR);
         }
@@ -40,10 +48,9 @@ class Config
 
         $this->init = $config[Config::INIT_KEY];
         $this->snPattern = $config[Config::SN_PATTERN];
+        $this->db_url = $config[Config::DATABASE_URL];
 
-        if($this->init===false){
-            throw new InitException(InitException::CONFIG_NOT_INITIALISED);
-        }
+        return $this->init;
     }
 
     /**
@@ -53,6 +60,7 @@ class Config
     {
         $this->init = false;
         $this->snPattern = "/[0-9]{0,5}/";
+        $this->db_url = $this->root."/db/iotDB.sqlite";
     }
 
     /**
@@ -63,10 +71,12 @@ class Config
     public function updateFile()
     {        
         $json =  $this->getJson();
-        $file = fopen(Config::FILENAME, 'w');
+        $file = fopen($this->configFileName, 'w');
+
         if($file===false){
             throw new InitException(InitException::CONFIG_FILE_CREATION_FAILED);
         }
+        
         $bytes = fwrite($file, $json);
         if($bytes===false){
             throw new InitException(InitException::CONFIG_FILE_CREATION_FAILED);
@@ -82,7 +92,8 @@ class Config
     {
         $array=array(
             Config::INIT_KEY=>$this->init,
-            Config::SN_PATTERN=>$this->snPattern
+            Config::SN_PATTERN=>$this->snPattern,
+            Config::DATABASE_URL=>$this->db_url
         );
 
         return json_encode($array);
@@ -121,6 +132,24 @@ class Config
     public function getSnPattern()
     {
         return $this->snPattern;
+    }
+    
+    /**
+    * get the database URL
+    * @return url the database url
+    */
+    public function getDbUrl()
+    {
+        return $this->db_url;
+    }
+
+    /**
+    * get the app root directory
+    * @return String root directory
+    */
+    public function getRoot()
+    {
+        return $this->root;
     }
     
 }

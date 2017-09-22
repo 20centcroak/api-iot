@@ -39,19 +39,14 @@ class Build{
     * create the database directory, the database and its associated tables
     * when everything goes right, it set the "init" flage of the configuration file to true
     * @param Config $config     a Config Object containing configuration parameters
+    * @param Config $config     a Config Object containing configuration parameters
     * @return boolean           true if build is successfull
     * @throws BuildException    when the database or the tables can't be created or accessed
     */
-    public static function build($config)
+    public static function build(Config $config, DbManagement $db)
     {
-        if(!file_exists(DbManagement::DB_FOLDER)){
-            if(!mkdir(DbManagement::DB_FOLDER)){
-                throw new BuildException(BuildException::CREATE_DB_DIRECTORY_FAILED);
-            }
-        }
-
         try{
-            $db = DbManagement::connect();
+            $db->connect($config->getDbUrl());
         }
         catch (DataBaseException $e){
             throw new BuildException(DataBaseException::DB_CONNECTION_FAILED);

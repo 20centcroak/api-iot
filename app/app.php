@@ -1,15 +1,16 @@
 <?php
 
 use Croak\Iot\Init\Config;
+use Slim\App;
 
 //main parameters of the Slim app
-$settings = require __DIR__ . '/settings.php';
+$settings = require 'settings.php';
 
 //adding the settings to the app
-$app = new \Slim\App($settings);
+$app = new App($settings);
 
 // Set up dependencies
-require __DIR__ . '/dependencies.php';
+require 'dependencies.php';
 
 //define routes
-require __DIR__ . '/routes.php';
+require 'routes.php';

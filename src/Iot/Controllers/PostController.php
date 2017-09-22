@@ -26,7 +26,7 @@ class PostController extends Controller
         $url = $request->getUri();
 
         try{
-            $id = IoTRequests::putMeasure($sn, $json, $this->getConfig());
+            $id = IoTRequests::putMeasure($sn, $json, $this->getConfig(), $this->getDataBase());
         }
         catch(DeviceException $e){
             return $this->requestError($response, $e->getMessage());
