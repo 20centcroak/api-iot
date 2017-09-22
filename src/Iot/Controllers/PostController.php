@@ -1,8 +1,8 @@
 <?php
 namespace Croak\Iot\Controllers;
 
-use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 use Croak\Iot\IoTRequests;
 use Croak\Iot\Exceptions\DeviceException;
 use Croak\Iot\Exceptions\MeasureException;
@@ -15,8 +15,8 @@ class PostController extends Controller
 {
     /**
     * add measure in the database
-    * @param \Psr\Http\Message\ServerRequestInterface $request
-    * @param \Psr\Http\Message\ResponseInterface $response
+    * @param Psr\Http\Message\ServerRequestInterface $request
+    * @param Psr\Http\Message\ResponseInterface $response
     * @param array args request arguments
     * @return a http response indicating if the measure has been correctly added or not
     */

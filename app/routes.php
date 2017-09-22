@@ -7,18 +7,18 @@ use Croak\Iot\Controllers\GetController;
 /**
 * home page : displays api-IoT guide
 */
-$app->get('/', \Croak\Iot\Controllers\RootController::class.':home');
+$app->get('/', Croak\Iot\Controllers\RootController::class.':home');
 
 /**
 * install or repair the app thanks to a default set of configuration data
 * and in creating the missing databases
 */
-$app->get('/install', \Croak\Iot\Controllers\RootController::class.':install');
+$app->get('/install', Croak\Iot\Controllers\RootController::class.':install');
 
 /** 
 * get device information for device with the given serial number (sn)
 */
-$app->get('/devices/{sn}', \Croak\Iot\Controllers\GetController::class.':getDevice');
+$app->get('/devices/{sn}', Croak\Iot\Controllers\GetController::class.':getDevice');
 
 /** 
 * get measures for the device identified with the given serial number (sn)
@@ -34,4 +34,4 @@ $app->get('/devices/{sn}', \Croak\Iot\Controllers\GetController::class.':getDevi
 * configuration of the app should control the way the tables are accessed
 * the use of tokens is recommended: see here https://www.slimframework.com/docs/features/csrf.html
 */
-$app->post('/devices/{sn}/measures', \Croak\Iot\Controllers\PostController::class.':postMeasure');
+$app->post('/devices/{sn}/measures', Croak\Iot\Controllers\PostController::class.':postMeasure');

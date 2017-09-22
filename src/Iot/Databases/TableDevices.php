@@ -29,7 +29,7 @@ class TableDevices
     /**
      * add a device to the device table in the database
      * @param Croak\Iot\Databases\DbManagement $db the database connector
-     * @param $name [optional] name of the device
+     * @param String $name [optional] name of the device
      * @throws DataBaseException     error in connecting to the database
      */
     public function addDevice(DbManagement $db, $name = "")

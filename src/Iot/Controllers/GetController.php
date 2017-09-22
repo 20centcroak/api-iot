@@ -1,9 +1,9 @@
 <?php
 namespace Croak\Iot\Controllers;
 
-use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
-use Croak\Iot\IoTRequests as IoTRequests;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
+use Croak\Iot\IoTRequests;
 use Croak\Iot\Exceptions\DeviceException;
 use Croak\Iot\Exceptions\DataBaseException;
 use Croak\Iot\Exceptions\InitException;
@@ -16,8 +16,8 @@ class GetController extends Controller
 {
     /**
     * Request device information based on device serial number ($args['sn'])
-    * @param \Psr\Http\Message\ServerRequestInterface $request
-    * @param \Psr\Http\Message\ResponseInterface $response
+    * @param Psr\Http\Message\ServerRequestInterface $request
+    * @param Psr\Http\Message\ResponseInterface $response
     * @param array args request arguments
     * @return a http response containing data about device as a json file or an error status if 
     * problems occur with database or if the device has not been found

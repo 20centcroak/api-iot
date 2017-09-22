@@ -19,6 +19,7 @@ class IoTRequests{
      * @param string $sn            the device sn
      * @param json $json            a json object containing the measure parameters
      * @param Config $config        the configuration of the app
+     * @param Croak\Iot\Databases\DbManagement $db the database connector
      *
      * @throws DeviceException      The device SN does not comply with SnPattern in api-config.json
      * @throws MeasureException     Error on the passed key/value  pair for measure

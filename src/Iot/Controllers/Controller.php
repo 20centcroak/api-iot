@@ -11,13 +11,13 @@ use Slim\Container;
 class Controller
 {
     /**
-    *@var \Slim\Container 
+    *@var Slim\Container 
     */
     private $container;
 
     /**
     * instantiates the slim container
-    * @param \Slim\Container $container the slim container
+    * @param Slim\Container $container the slim container
     */
     public function __construct(Container $container){
         $this->container = $container;
@@ -33,9 +33,9 @@ class Controller
 
     /**
     * returns a server error due to an issue with the server or the app
-    * @param \Psr\Http\Message\ResponseInterface $response the response interface
+    * @param Psr\Http\Message\ResponseInterface $response the response interface
     * @param String $message a message to add in the body
-    * @return \Psr\Http\Message\ResponseInterface
+    * @return Psr\Http\Message\ResponseInterface
     */
     public function serverError(Response $response, $message){
         $this->debug($message);
@@ -46,9 +46,9 @@ class Controller
 
     /**
     * returns a http response with a 400 status. The request was not accepted
-    * @param \Psr\Http\Message\ResponseInterface $response the response interface
+    * @param Psr\Http\Message\ResponseInterface $response the response interface
     * @param String $message a message to add in the body
-    * @return \Psr\Http\Message\ResponseInterface
+    * @return Psr\Http\Message\ResponseInterface
     */
     public function requestError(Response $response, $message){
         $this->debug($message);
@@ -59,9 +59,9 @@ class Controller
 
     /**
     * returns a http response with a 200 status. The request was accepted
-    * @param \Psr\Http\Message\ResponseInterface $response the response interface
+    * @param Psr\Http\Message\ResponseInterface $response the response interface
     * @param String $message a message to add in the body
-    * @return \Psr\Http\Message\ResponseInterface
+    * @return Psr\Http\Message\ResponseInterface
     */
     public function success(Response $response, $message){
         $body = $response->getBody();
@@ -71,9 +71,9 @@ class Controller
 
     /**
     * returns a http response with a 201 status. The request has been created
-    * @param \Psr\Http\Message\ResponseInterface $response the response interface
+    * @param Psr\Http\Message\ResponseInterface $response the response interface
     * @param String $address the address location to return in body
-    * @return \Psr\Http\Message\ResponseInterface
+    * @return Psr\Http\Message\ResponseInterface
     */
     public function createSuccess(Response $response, $address, $message){
         $body = $response->getBody();

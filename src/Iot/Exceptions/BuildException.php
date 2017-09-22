@@ -5,7 +5,7 @@ namespace Croak\Iot\Exceptions;
 /**
  * Exception sent when an error while building the app during the first launch
  */
-class BuildException extends \Exception
+class BuildException extends Exception
 {
     /**
     *@var String    error description
