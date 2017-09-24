@@ -34,6 +34,14 @@ class TableMeasures
     }
 
     public function getMeasures(DbManagement $db, $sn, $params){
+
+        $query = SqliteQueries::GET_MEASURE_BY_SN;
+
+        if (isset($params[MEASURE::KEYS["type"]]){
+            $type = $params[MEASURE::KEYS["type"]];
+            $query = 
+            $db->query($query, $array);
+        }
         $db->query(SqliteQueries::GET_MEASURE_BY_SN, $array);
     }
 }

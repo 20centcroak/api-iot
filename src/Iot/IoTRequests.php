@@ -51,7 +51,7 @@ class IoTRequests{
      * @throws MeasureException     Error on the passed key/value  pair for measure
      * @throws DataBaseException    Error while connecting to the database
      */
-     public static function getMeasures($sn, $json, $config, DbManagement $db){  
+     public static function getMeasures($sn, $param, DbManagement $db){  
 
           $measure;
           $measure = Measure::create($json);
