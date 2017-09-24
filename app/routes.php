@@ -21,6 +21,11 @@ $app->get('/install', Croak\Iot\Controllers\RootController::class.':install');
 $app->get('/devices/{sn}', Croak\Iot\Controllers\GetController::class.':getDevice');
 
 /** 
+* get measures for the device named by it sn
+*/
+$app->get('/measures/{sn}', Croak\Iot\Controllers\GetController::class.':getMeasures');
+
+/** 
 * get measures for the device identified with the given serial number (sn)
 */
 // $app->get('/devices/{sn}', \Croak\Iot\Controllers\GetController::class.':getDevice');

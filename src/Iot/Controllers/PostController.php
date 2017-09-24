@@ -4,6 +4,7 @@ namespace Croak\Iot\Controllers;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Croak\Iot\IoTRequests;
+use Croak\Iot\Measure;
 use Croak\Iot\Exceptions\DeviceException;
 use Croak\Iot\Exceptions\MeasureException;
 use Croak\Iot\Exceptions\DataBaseException;
@@ -21,9 +22,16 @@ class PostController extends Controller
     * @return a http response indicating if the measure has been correctly added or not
     */
     public function postMeasure(Request $request, Response $response, $args){    
-        $sn = (string)$args['sn'];
-        $json = $request->getParsedBody();
+        
         $url = $request->getUri();
+
+        $sn = (string)$args['sn'];
+        $date = date("Y-m-d H:i:s");
+        $json = $request->getParsedBody();
+        $arrayJson = json_decode($json);
+        $arrayJson[Measure::KEYS["deviceSn"]] = $sn;
+        $arrayJson[Measure::KEYS["date"]] = $date;
+        $json = json_encode($arrayJson);        
 
         try{
             $id = IoTRequests::putMeasure($sn, $json, $this->getConfig(), $this->getDataBase());

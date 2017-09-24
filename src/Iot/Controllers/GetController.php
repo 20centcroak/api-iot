@@ -43,6 +43,31 @@ class GetController extends Controller
         catch(InitException $e){
             return $this->requestError($response, $e->getMessage());
         }
+    }
 
+    /**
+    * Request measures based on device serial number ($args['sn']). 
+    * Params to sort data can be applied thanks to the params associated with the request.
+    * for example /measures/{sn}?sort=date&order=desc&type="temperature"
+    * @param Psr\Http\Message\ServerRequestInterface $request
+    * @param Psr\Http\Message\ResponseInterface $response
+    * @param array args request arguments
+    * @return a http response containing data about measures as a json file or an error status if 
+    * problems occur with database or if the device has not been found
+    */
+    public function getMeasures(Request $request, Response $response, $args){
+
+        $params = $request->getQueryParams();
+        $sn = (string)$args['sn'];
+        $this->debug("get measures for $sn with params $params");
+        try{
+            IoTRequests::getMeasures($sn, $params, $this->getDataBase());
+        }
+        catch(MeasureException $e){
+            return $this->requestError($response, $e->getMessage());
+        }
+        catch(DatabaseException $e){
+            return $this->requestError($response, $e->getMessage());
+        }
     }
 }

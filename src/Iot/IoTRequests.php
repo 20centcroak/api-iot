@@ -33,7 +33,7 @@ class IoTRequests{
         $tableDevice->addDevice($db);
 
         $measure;
-        $measure = Measure::create($json, $sn);
+        $measure = Measure::create($json);
         $tableMeasures = new TableMeasures($measure);
         $id = $tableMeasures->populate($db);
 
@@ -42,8 +42,29 @@ class IoTRequests{
     }
 
     /**
+     * Manages a request for delivering measures associated with a given device
+     *
+     * @param string $sn            the device sn
+     * @param Croak\Iot\Databases\DbManagement $db the database connector
+     *
+     * @throws DeviceException      The device SN does not comply with SnPattern in api-config.json
+     * @throws MeasureException     Error on the passed key/value  pair for measure
+     * @throws DataBaseException    Error while connecting to the database
+     */
+     public static function getMeasures($sn, $json, $config, DbManagement $db){  
+
+          $measure;
+          $measure = Measure::create($json);
+          $tableMeasures = new TableMeasures($measure);
+          $id = $tableMeasures->populate($db);
+  
+          $db->disconnect();
+          return $id;
+      }
+
+    /**
      * Manages a request for information on device
-     * if the device does not exist, an DeviceException occurs
+     * if the device does not exist, a DeviceException occurs
      *
      * @param string $sn            the device sn
      * @param Config $config        the configuration of the app

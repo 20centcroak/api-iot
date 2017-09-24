@@ -50,6 +50,12 @@ class SqliteQueries
 
     const ADD_DEVICE = "INSERT OR IGNORE INTO devices(sn, name, created) VALUES(:sn, :name, :created)";
 
+    const GET_MEASURE_BY_SN = "SELECT * FROM devices WHERE sn = :sn";
+
+    const GET_MEASURE_BY_SN_AND_TYPE = "SELECT * FROM devices WHERE "
+                                                        .MEASURE::KEYS["deviceSn"]." = :".MEASURE::KEYS["deviceSn"]."
+                                                         AND ".MEASURE::KEYS["type"]." = :".MEASURE::KEYS["type"];
+
     const ADD_MEASURE = "INSERT INTO measures(id_device, type, unit, value, created) VALUES(:id_device, :type, :unit, :value, :created)";
     
     /**

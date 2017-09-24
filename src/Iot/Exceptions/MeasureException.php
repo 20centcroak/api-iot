@@ -12,6 +12,7 @@ class MeasureException extends Exception
     */
     const MISSING_KEY = "a key is missing in json representing measure";
     const MISSING_VALUE = "a value is missing in json representing measure";
+    const UNEXISTING_KEY = "key does not exist";
 
     /**
      * construct the object thanks to a code value (one of the const above)
