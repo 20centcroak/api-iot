@@ -5,7 +5,7 @@ namespace Croak\Iot\Exceptions;
 /**
  * Exception sent when an error while connecting or reading/writing in the database occurs
  */
-class DataBaseException extends Exception
+class DataBaseException extends \Exception
 {
     /**
     *@var String    error description

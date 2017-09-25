@@ -37,11 +37,30 @@ class TableMeasures
 
         $query = SqliteQueries::GET_MEASURE_BY_SN;
 
-        if (isset($params[MEASURE::KEYS["type"]]){
-            $type = $params[MEASURE::KEYS["type"]];
-            $query = 
-            $db->query($query, $array);
+        $array = [];
+
+        foreach(MEASURE::KEYS as $key=>$val){
+            if (isset($params[$val])){
+                $type = $params[$val];
+                $query = $query." AND $val:$val";
+                var_dump($query);
+                $array[] = $val;
+                $db->query($query, $array);
+            }
         }
-        $db->query(SqliteQueries::GET_MEASURE_BY_SN, $array);
+        $answer = $db->query($query, $array);
+
+        $measures = [];
+        $argsMeasure = [];
+        while ($row = $answer->fetch(\PDO::FETCH_ASSOC)) {
+            foreach(MEASURE::KEYS as $key=>$val){
+                $argsMeasure[] = [
+                    $val=>$row[$val]
+                ];                
+            }
+            $measures[]=Measure::create(json_encode($argsMeasure));
+        }
+        
+        return $measures;
     }
 }

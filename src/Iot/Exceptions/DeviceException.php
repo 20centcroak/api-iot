@@ -5,7 +5,7 @@ namespace Croak\Iot\Exceptions;
 /**
  * Exception sent when an error occured when defining a device
  */
-class DeviceException extends Exception
+class DeviceException extends \Exception
 {
     /**
     *@var String    error description

@@ -5,9 +5,11 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Croak\Iot\IoTRequests;
 use Croak\Iot\Exceptions\DeviceException;
+use Croak\Iot\Exceptions\MeasureException;
 use Croak\Iot\Exceptions\DataBaseException;
 use Croak\Iot\Exceptions\InitException;
 use Croak\Iot\Device;
+use Croak\Iot\Measure;
 
 /**
 * Controller for routes based on "GET" requests
@@ -59,9 +61,15 @@ class GetController extends Controller
 
         $params = $request->getQueryParams();
         $sn = (string)$args['sn'];
-        $this->debug("get measures for $sn with params $params");
+
         try{
-            IoTRequests::getMeasures($sn, $params, $this->getDataBase());
+            $measures = IoTRequests::getMeasures($sn, $params, $this->getDataBase());
+
+            $data = [];
+            foreach($measures as $key=>$val){
+                $data[] = $val->getAllData();;
+            }
+            return $this->sendJson($response, $data);
         }
         catch(MeasureException $e){
             return $this->requestError($response, $e->getMessage());

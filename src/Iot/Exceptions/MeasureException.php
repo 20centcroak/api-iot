@@ -5,7 +5,7 @@ namespace Croak\Iot\Exceptions;
 /**
  * Exception sent when an error while defining a measure
  */
-class MeasureException extends Exception
+class MeasureException extends \Exception
 {
     /**
     *@var String    error description

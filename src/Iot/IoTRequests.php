@@ -34,8 +34,8 @@ class IoTRequests{
 
         $measure;
         $measure = Measure::create($json);
-        $tableMeasures = new TableMeasures($measure);
-        $id = $tableMeasures->populate($db);
+        $tableMeasures = new TableMeasures();
+        $id = $tableMeasures->populate($db, $measure);
 
         $db->disconnect();
         return $id;
@@ -53,13 +53,12 @@ class IoTRequests{
      */
      public static function getMeasures($sn, $param, DbManagement $db){  
 
-          $measure;
-          $measure = Measure::create($json);
-          $tableMeasures = new TableMeasures($measure);
-          $id = $tableMeasures->populate($db);
-  
-          $db->disconnect();
-          return $id;
+
+        $tableMeasures = new TableMeasures();
+        $measures = $tableMeasures->getMeasures($db, $sn, $param);
+
+        $db->disconnect();
+        return $measures;
       }
 
     /**

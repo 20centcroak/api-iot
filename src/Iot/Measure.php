@@ -50,7 +50,7 @@ class Measure{
     * @return a new Measure Object
     * @throws MeasureException when a parameter for the measure object is missing in the json string
     */
-    public static function create($json){  
+    public static function create($json){
 
         foreach (MEASURE::KEYS as $key=>$val) {
             if(!array_key_exists($val, $json)){
@@ -74,7 +74,7 @@ class Measure{
         if(!array_key_exists($key, $this->values)){
             throw new MeasureException(MeasureException::UNEXISTING_KEY);
         }
-        return $this->values[$key];
+        return $this->values[$val];
     }
 
     /**
