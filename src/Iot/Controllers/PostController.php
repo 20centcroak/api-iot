@@ -27,14 +27,12 @@ class PostController extends Controller
 
         $sn = (string)$args['sn'];
         $date = date("Y-m-d H:i:s");
-        $json = $request->getParsedBody();
-        $arrayJson = json_decode($json);
+        $arrayJson = $request->getParsedBody();  
         $arrayJson[Measure::KEYS["deviceSn"]] = $sn;
         $arrayJson[Measure::KEYS["date"]] = $date;
-        $json = json_encode($arrayJson);        
 
         try{
-            $id = IoTRequests::putMeasure($sn, $json, $this->getConfig(), $this->getDataBase());
+            $id = IoTRequests::postMeasure($sn, $arrayJson, $this->getConfig(), $this->getDataBase());
         }
         catch(DeviceException $e){
             return $this->requestError($response, $e->getMessage());

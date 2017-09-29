@@ -3,6 +3,7 @@ namespace Croak\Iot\Controllers;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Croak\Iot\Databases\DbManagement;
+use Croak\Iot\Databases\IotQueries;
 use Slim\Container;
 
 /**
@@ -110,6 +111,14 @@ class Controller
         $url = $this->container->config->getDbUrl();
         $db->connect($url);
         return $db;
+    }
+
+    /**
+    * getter for the Iot queries
+    * @return Croak\Iot\Databases\Queries
+    */
+    public function getQueries(){
+        return $this->container->queries;
     }
 
 }

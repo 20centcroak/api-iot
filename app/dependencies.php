@@ -2,6 +2,7 @@
 
 use Croak\Iot\Init\Config;
 use Croak\Iot\Databases\DbManagementSqlite;
+use Croak\Iot\Databases\SqliteIotQueries;
 use Monolog\Logger;
 
 $container = $app->getContainer();
@@ -27,4 +28,9 @@ $container['config'] = function() {
 //adding database service in the container
 $container['database'] = function() {
     return new DbManagementSqlite();
+};
+
+//adding database service in the container
+$container['queries'] = function() {
+    return new SqliteIotQueries();
 };

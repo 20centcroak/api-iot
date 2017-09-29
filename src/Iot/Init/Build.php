@@ -43,7 +43,7 @@ class Build{
     * @return boolean           true if build is successfull
     * @throws BuildException    when the database or the tables can't be created or accessed
     */
-    public static function build(Config $config, DbManagement $db)
+    public static function build(Config $config, DbManagement $db, Queries $queries)
     {
         try{
             $db->connect($config->getDbUrl());

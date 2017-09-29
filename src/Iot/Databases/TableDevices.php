@@ -12,36 +12,16 @@ use Croak\Iot\Databases\DbManagement;
 class TableDevices
 {
     /**
-    *@var Device    Device description
-    */
-    private $device;
-
-
-    /**
-     * construct the object thanks to the definition of a device object
-     * @param Device $device        the device object defining a device
-     */
-    public function __construct(Device $device)
-    {
-        $this->device = $device;
-    }
-
-    /**
      * add a device to the device table in the database
      * @param Croak\Iot\Databases\DbManagement $db the database connector
-     * @param String $name [optional] name of the device
+     * @param Devide $device the device Object
      * @throws DataBaseException     error in connecting to the database
      */
-    public function addDevice(DbManagement $db, $name = "")
+    public function populate(DbManagement $db, Device $device)
     {
-        $array = array(
-            Device::NAME_KEY=>$this->device->getName(),
-            Device::SN_KEY=> $this->device->getSn(),
-            Device::CREATED_KEY=> date("Y-m-d H:i:s")
-        );
-
+        $array = $device->getValues();
         $db->query(SqliteQueries::ADD_DEVICE, $array);
-        $this->updateDeviceInformation($db);
+        return $db->lastInsertId();
     }
 
     /**
@@ -50,7 +30,7 @@ class TableDevices
     * @throws DataBaseException if database access failed
     * @return true if the device exists in database and the device information has been updated, false othewise    *
     */
-    public function updateDeviceInformation(DbManagement $db)
+    public function getDevices(DbManagement $db, $params)
     {        
         $array = array(Device::SN_KEY => $this->device->getSn());
 

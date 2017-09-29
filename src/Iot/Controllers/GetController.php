@@ -24,7 +24,7 @@ class GetController extends Controller
     * @return a http response containing data about device as a json file or an error status if 
     * problems occur with database or if the device has not been found
     */
-    public function getDevice(Request $request, Response $response, $args){
+    public function getDevices(Request $request, Response $response, $args){
         $sn = (string)$args['sn'];
         $this->debug("get profile for $sn");
 
@@ -60,14 +60,16 @@ class GetController extends Controller
     public function getMeasures(Request $request, Response $response, $args){
 
         $params = $request->getQueryParams();
-        $sn = (string)$args['sn'];
+        if(array_key_exists("deviceSn",$params)){
+            $params["deviceSn"] = (string)$args['sn'];
+        }
 
         try{
-            $measures = IoTRequests::getMeasures($sn, $params, $this->getDataBase());
+            $measures = IoTRequests::getMeasures($this->getDataBase(), $this->getQueries(), $params);
 
             $data = [];
             foreach($measures as $key=>$val){
-                $data[] = $val->getAllData();;
+                $data[] = $val->getValues();;
             }
             return $this->sendJson($response, $data);
         }

@@ -60,7 +60,7 @@ class RootController extends Controller
         
         //build the app: create database and tables
         try{
-            Build::build($config, $this->getDataBase() );
+            Build::build($config, $this->getDataBase(), $this->getQueries() );
             $this->debug("tables has been accessed successfully");
         }
         catch(BuildException $be){
