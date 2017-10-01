@@ -3,7 +3,7 @@
 namespace Croak\Iot\Init;
 use Croak\Iot\Databases\DbManagement;
 use Croak\Iot\Exceptions\DataBaseException;
-use Croak\Iot\Databases\SqliteQueries;
+use Croak\Iot\Databases\IotQueries;
 use Croak\Iot\Exceptions\BuildException;
 use Croak\Iot\Init\Config;
 
@@ -43,7 +43,7 @@ class Build{
     * @return boolean           true if build is successfull
     * @throws BuildException    when the database or the tables can't be created or accessed
     */
-    public static function build(Config $config, DbManagement $db, Queries $queries)
+    public static function build(Config $config, DbManagement $db, IotQueries $queries)
     {
         try{
             $db->connect($config->getDbUrl());
@@ -52,18 +52,23 @@ class Build{
             throw new BuildException(DataBaseException::DB_CONNECTION_FAILED);
         }
 
-        $devicesCreated = $db->query(SqliteQueries::CREATE_TABLE_DEVICES);
-        $usersCreated = $db->query(SqliteQueries::CREATE_TABLE_USERS);
-        $measuresCreated = $db->query(SqliteQueries::CREATE_TABLE_MEASURES);
+        $query = $queries->createMeasureTable();
+
+
+        $measuresCreated = $db->query($query);
+        // $query = $queries->createDeviceTable();
+        // $devicesCreated = $db->query($query);
+        // $query = $queries->createUserTable();
+        // $usersCreated = $db->query($query);
 
         $db->disconnect();
 
-        if($devicesCreated===false){
-            throw new BuildException(BuildException::INIT_TABLE_DEVICE_FAILED);
-        }
-        if($usersCreated===false){
-            throw new BuildException(BuildException::INIT_TABLE_USER_FAILED);
-        }
+        // if($devicesCreated===false){
+        //     throw new BuildException(BuildException::INIT_TABLE_DEVICE_FAILED);
+        // }
+        // if($usersCreated===false){
+        //     throw new BuildException(BuildException::INIT_TABLE_USER_FAILED);
+        // }
         if($measuresCreated===false){
             throw new BuildException(BuildException::INIT_TABLE_MEASURE_FAILED);
         }

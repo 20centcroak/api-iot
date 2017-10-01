@@ -32,7 +32,7 @@ class Measure{
     const KEY_TYPES = array(
         "type"=>"is_string",
         "unit"=>"is_string",
-        "value"=>"is_numeric",
+        "value"=>"is_float",
         "deviceSn"=>"is_string",
         "date"=>"is_string"
     );
@@ -71,7 +71,7 @@ class Measure{
     */
     private function __construct($params){
 
-        foreach (MEASURE::KEYS as $key=>$val) {
+        foreach (Measure::KEYS as $key=>$val) {
             $this->values[$val] = $params[$val];
         }
      
@@ -85,13 +85,13 @@ class Measure{
     */
     public static function create($params){
 
-        foreach (MEASURE::KEYS as $key=>$val) {
+        foreach (Measure::KEYS as $key=>$val) {
             
             if(!array_key_exists($val, $params)){
                 throw new MeasureException(MeasureException::MISSING_KEY);
             }
         }
-        foreach (MEASURE::KEYS as $key=>$val) {
+        foreach (Measure::KEYS as $key=>$val) {
             if(!isset($params[$val])){
                 throw new MeasureException(MeasureException::MISSING_VALUE);
             }

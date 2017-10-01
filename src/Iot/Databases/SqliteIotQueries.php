@@ -31,7 +31,7 @@ class SqliteIotQueries implements IotQueries
         $unique = ", UNIQUE(id";
         foreach(Measure::KEYS as $key=>$val){
             $query = $query.", $val ";
-            $query = $query.translateType(Measure::KEY_TYPES[$key]);
+            $query = $query.$this->translateType(Measure::KEY_TYPES[$key]);
             if(Measure::KEY_REQUIRED[$key]){
                 $query = $query." NOT NULL";
             }
@@ -41,6 +41,7 @@ class SqliteIotQueries implements IotQueries
         }
         $unique = $unique.")";
         $query = $query.$unique;
+        $query = $query.");";
         return $query;
     }
 
@@ -53,7 +54,7 @@ class SqliteIotQueries implements IotQueries
         $unique = ", UNIQUE(id";
         foreach(Device::KEYS as $key=>$val){
             $query = $query.", $val ";
-            $query = $query.translateType(Device::KEY_TYPES[$key]);
+            $query = $query.$this->translateType(Device::KEY_TYPES[$key]);
             if(Device::KEY_REQUIRED[$key]){
                 $query = $query." NOT NULL";
             }
@@ -63,6 +64,7 @@ class SqliteIotQueries implements IotQueries
         }
         $unique = $unique.")";
         $query = $query.$unique;
+        $query = $query.");";
         return $query;
     }
 
@@ -106,7 +108,7 @@ class SqliteIotQueries implements IotQueries
     * @return String the corresponding query
     */
     private function createTable($name){
-        return IotQueries::CREATE_TABLE.$name." (id    INTEGER    PRIMARY KEY AUTOINCREMENT";
+        return SqliteIotQueries::CREATE_TABLE.$name." (id    INTEGER    PRIMARY KEY AUTOINCREMENT";
      }
     
     /**
@@ -116,14 +118,11 @@ class SqliteIotQueries implements IotQueries
     */
     private function translateType($type){
          switch($type){
-             case "String":
+             case "is_string":
                  return "TEXT";
                  break;
-             case "double":
+             case "is_numeric":
                  return "REAL";
-                 break;
-             case "int":
-                 return "INTEGER";
                  break;
          }
      }

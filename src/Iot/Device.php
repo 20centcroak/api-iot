@@ -9,114 +9,100 @@ use Croak\Iot\Exceptions\DeviceException;
  */
 class Device
 {
+/**
+    *@var Array  KEYS  key names expected in params file
+    */
+    const KEYS = array(
+        "deviceSn"=>"sn",
+        "date"=>"created",
+        "idUser"=>"idUser"
+    );
 
     /**
-    *@var String    key names expected in json file
+    *@var Array  KEY_TYPES  key types associated with key names
     */
-    const SN_KEY="sn";
-    const NAME_KEY="name";
-    const CREATED_KEY="created";
+    const KEY_TYPES = array(
+        "deviceSn"=>"is_string",
+        "date"=>"is_string",
+        "idUser"=>"is_int"
+    );
 
     /**
-    *@var String    serial number of device
+    *@var Array  KEY_REQUIRED  indicates which keys are required
     */
-    private $sn;
-     /**
-    *@var String    name of device
-    */
-    private $name;
-     /**
-    *@var String    date of creation of device
-    */
-    private $created;
+    const KEY_REQUIRED = array(
+        "deviceSn"=>true,
+        "date"=>true,
+        "idUser"=>false
+    );
 
     /**
+    *@var Array  KEY_UNIQUE  indicates which keys should be unique
+    */
+    const KEY_UNIQUE = array(
+        "deviceSn"=>true,
+        "date"=>false,
+        "idUser"=>false
+    );
+
+    /**
+    *@var Array $values values of the device object
+    */
+    private $values = array();
+
+    /** 
     * private constructor : building the object
     * should be done by calling create()
-    * @param String $sn       the serial number of the device
+    * @param mixed $params        the decoded params string 
     */
-    private function __construct($sn)
-    {
-        $this->sn = $sn;
+    private function __construct($params){
+        foreach (Device::KEYS as $key=>$val) {
+            $this->values[$val] = $params[$val];
+        }            
     }
-
-    /**
-    * build the Device Object if the device sn is matching the specified pattern
-    * The specified pattern is set in the configuratiuon file api-config.json
-    * @param String $sn                     the serial number of the device
-    * @param regex String $snPattern        the regex pattern imposed to the sn
-    * @return Device                        a new Device Object
-    * @throws DeviceException               if the device sn does not match the sn pattern
+        
+    /** 
+    * build the Device Object if the key/value of the params file are correct
+    * @param params $params             the params string containing device parameters
+    * @return a new Device Object
+    * @throws DeviceException when a parameter for the device object is missing in the params string
     */
-    public static function create($sn, $snPattern)
-    {
-        if (!preg_match($snPattern, $sn)) {
-            throw new DeviceException(DeviceException::DEVICE_SN);
+    public static function create($params){
+
+        foreach (Device::KEYS as $key=>$val) {            
+            if(!array_key_exists($val, $params)){
+                throw new DeviceException(DeviceException::MISSING_KEY);
+            }
+        }
+        foreach (Device::KEYS as $key=>$val) {
+            if(!isset($params[$val])){
+                throw new MeasureException(DeviceException::MISSING_VALUE);
+            }
+            if($key==="deviceSn" & !preg_match($snPattern, $params[$val])) {
+                throw new DeviceException(DeviceException::DEVICE_SN);
+            }
         }
 
-        return new Device($sn);
+        return new Device($params);
     }
 
     /**
-    * update the device parameters
-    * @param Json $json             the json String containing new parameters
-    * @throws DeviceException       essential key or value are missing in the json file
+    * getter of a device parameter
+    * @return mixed        device parameter value
     */
-    public function update($json)
-    {
-         $data = json_decode($json);         
-
-        if (!array_key_exists(Device::SN_KEY, $data)) {
-            throw new DeviceException(DeviceException::MISSING_KEY);
+    public function getValue($key){
+        if(!array_key_exists($key, $this->values)){
+            throw new DeviceException(DeviceException::UNEXISTING_KEY);
         }
-        if (empty($data->{Device::SN_KEY})) {
-            throw new DeviceException(DeviceException::MISSING_VALUE);
-        }
-
-        $this->sn = $data->{Device::SN_KEY};
-        $this->name = $data->{Device::NAME_KEY};
-        $this->created = $data->{Device::CREATED_KEY};
+        return $this->values[$val];
     }
 
     /**
-    * getter of variable SN
-    * @return String the device sn
+    * getter of device array
+    * @return array        device array
     */
-    public function getSn()
-    {
-        return $this->sn;
+    public function getValues(){
+        return $this->values;
     }
 
-    /**
-    * getter of variable name
-    * @return String the device name
-    */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-    * getter of variable created
-    * @return String the creation date of the device
-    */
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    /**
-    *getter of all data for the device
-    *@return all data concerning the device in an array
-    */
-    public function getAllData()
-    {
-        $array = array(
-            Device::SN_KEY=> $this->sn,
-            Device::CREATED_KEY=> $this->created,
-            Device::NAME_KEY=> $this->name
-        );
-
-        return $array;
-    }
 }

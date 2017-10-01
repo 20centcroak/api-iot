@@ -60,7 +60,10 @@ class GetController extends Controller
     public function getMeasures(Request $request, Response $response, $args){
 
         $params = $request->getQueryParams();
-        if(array_key_exists("deviceSn",$params)){
+        if(!array_key_exists("deviceSn",$params)){
+            if(!array_key_exists("sn",$args)){
+                return $this->requestError($response, "no device associated with measure");
+            }
             $params["deviceSn"] = (string)$args['sn'];
         }
 
