@@ -15,7 +15,7 @@ class SqliteIotQueries implements IotQueries
     *@var String    basic sqlite queries used in the app
     */
     const CREATE_TABLE = "CREATE TABLE IF NOT EXISTS "; 
-    const GET_DEVICES = "SELECT * FROM ".IotQueries::MEASURES_TABLE_NAME;
+    const GET_DEVICES = "SELECT * FROM ".IotQueries::DEVICES_TABLE_NAME;
     const ADD_DEVICE = "INSERT OR IGNORE INTO ".IotQueries::DEVICES_TABLE_NAME;
     const GET_MEASURES = "SELECT * FROM ".IotQueries::MEASURES_TABLE_NAME;
     const ADD_MEASURE = "INSERT INTO ".IotQueries::MEASURES_TABLE_NAME;
@@ -27,22 +27,12 @@ class SqliteIotQueries implements IotQueries
     * @return String query to create the table
     */
     public function createMeasureTable(){
-        $query = $this->createTable("measures");
-        $unique = ", UNIQUE(id";
-        foreach(Measure::KEYS as $key=>$val){
-            $query = $query.", $val ";
-            $query = $query.$this->translateType(Measure::KEY_TYPES[$key]);
-            if(Measure::KEY_REQUIRED[$key]){
-                $query = $query." NOT NULL";
-            }
-            if(Measure::KEY_UNIQUE[$key]){
-                $unique = $unique.", $val";
-            }
-        }
-        $unique = $unique.")";
-        $query = $query.$unique;
-        $query = $query.");";
-        return $query;
+        return $this->createTable("measures", 
+                                    Measure::KEYS, 
+                                    Measure::KEY_TYPES, 
+                                    Measure::KEY_REQUIRED, 
+                                    Measure::KEY_UNIQUE
+                                );
     }
 
     /**
@@ -50,22 +40,12 @@ class SqliteIotQueries implements IotQueries
     * @return String query to create the table
     */
     public function createDeviceTable(){
-        $query = $this->createTable("devices");
-        $unique = ", UNIQUE(id";
-        foreach(Device::KEYS as $key=>$val){
-            $query = $query.", $val ";
-            $query = $query.$this->translateType(Device::KEY_TYPES[$key]);
-            if(Device::KEY_REQUIRED[$key]){
-                $query = $query." NOT NULL";
-            }
-            if(Device::KEY_UNIQUE[$key]){
-                $unique = $unique.", $val";
-            }
-        }
-        $unique = $unique.")";
-        $query = $query.$unique;
-        $query = $query.");";
-        return $query;
+        return $this->createTable("devices", 
+                                    Device::KEYS, 
+                                    Device::KEY_TYPES, 
+                                    Device::KEY_REQUIRED, 
+                                    Device::KEY_UNIQUE
+                                );       
     }
 
     /**
@@ -107,8 +87,25 @@ class SqliteIotQueries implements IotQueries
     * @param $name the table name to create
     * @return String the corresponding query
     */
-    private function createTable($name){
-        return SqliteIotQueries::CREATE_TABLE.$name." (id    INTEGER    PRIMARY KEY AUTOINCREMENT";
+    private function createTable($name, $keys, $keyTypes, $keyRequired, $keyUnique){
+        $query = SqliteIotQueries::CREATE_TABLE.$name." (id    INTEGER    PRIMARY KEY AUTOINCREMENT";
+        $unique = ", UNIQUE(id";
+
+        foreach($keys as $key=>$val){
+            $query = $query.", $val ";
+            $query = $query.$this->translateTypeForTable($keyTypes[$key]);
+            if($keyRequired[$key]){
+                $query = $query." NOT NULL";
+            }
+            if($keyUnique[$key]){
+                $unique = $unique.", $val";
+            }
+        }
+
+        $unique = $unique.")";
+        $query = $query.$unique;
+        $query = $query.");";
+        return $query;
      }
     
     /**
@@ -116,7 +113,7 @@ class SqliteIotQueries implements IotQueries
     * @param $type the expected data type
     * @return the query word corresponding to the data type to describe the database field
     */
-    private function translateType($type){
+    private function translateTypeForTable($type){
          switch($type){
              case "is_string":
                  return "TEXT";

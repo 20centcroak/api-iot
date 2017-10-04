@@ -21,6 +21,11 @@ $app->get('/install', Croak\Iot\Controllers\RootController::class.':install');
 $app->get('/devices/{sn}', Croak\Iot\Controllers\GetController::class.':getDevices');
 
 /** 
+* get all devices
+*/
+$app->get('/devices', Croak\Iot\Controllers\GetController::class.':getDevices');
+
+/** 
 * get measures for the device named by it sn
 */
 $app->get('/measures/{sn}', Croak\Iot\Controllers\GetController::class.':getMeasures');
@@ -30,14 +35,9 @@ $app->get('/measures/{sn}', Croak\Iot\Controllers\GetController::class.':getMeas
 */
 $app->get('/measures', Croak\Iot\Controllers\GetController::class.':getMeasures');
 
-/** 
-* get measures for the device identified with the given serial number (sn)
-*/
-// $app->get('/devices/{sn}', \Croak\Iot\Controllers\GetController::class.':getDevice');
 
 /** 
-* put measure in the database thanks to a PUT request with /devices/sn route
-* where sn should match a specific pattern set in the configuration file api-config.json
+* post measure in the database thanks to a POST request if device sn exists
 *
 * if device does not exist, it will be automatically created **** THIS SHOULD BE MODIFIED*****
 * we should avoid bombing by creating a lot of devices or measures

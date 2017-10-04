@@ -14,6 +14,10 @@ use Croak\Iot\Exceptions\DataBaseException;
 */
 class PostController extends Controller
 {
+
+    public function postMeasures(Request $request, Response $response, $args){
+        return $this->post($request, $response, $args, "measure");
+    }
     /**
     * add measure in the database
     * @param Psr\Http\Message\ServerRequestInterface $request
@@ -21,7 +25,7 @@ class PostController extends Controller
     * @param array args request arguments
     * @return a http response indicating if the measure has been correctly added or not
     */
-    public function postMeasure(Request $request, Response $response, $args){    
+    public function post(Request $request, Response $response, $args, $type){    
         
         $url = $request->getUri();
 

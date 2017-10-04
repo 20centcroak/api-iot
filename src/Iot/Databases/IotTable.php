@@ -4,44 +4,47 @@ namespace Croak\Iot\Databases;
 
 use Croak\Iot\Exception\DataBaseException;
 use Croak\Iot\Databases\DbManagement;
-use Croak\Iot\Databases\IotQueries;
-use Croak\Iot\Measure;
+use Croak\Iot\IotObject;
 
 /**
- * Manages the table containing the measures
+ * Manages an Iot Table by providing a new IotObject or by quering data 
+ *associated with an IotObject in the database
  */
-class TableMeasures
+class IotTable
 {
     /**
-     * add a measure to the measure table in the database
+     * add an Object to the table in the database
      * @param Croak\Iot\Databases\DbManagement $db the database connector
-     * @param Croak\Iot\Measure $measure the measure object containing all data
+     * @param Croak\Iot\IotObject $object the IotObject containing all needed data to populate database
+     * @param String $query the query to populate database
      * @throws DataBaseException     error in connecting to the database
      * @return id of the record
      */
-    public function populate(DbManagement $db, Measure $measure)
+    public function populate(DbManagement $db, IotObject $object, $query)
     {
-        $array = $measure->getValues();
-        $db->query(SqliteQueries::ADD_MEASURE, $array);
+        $array = $object->getValues();
+        $db->query($query, $array);
         return $db->lastInsertId();
     }
 
     /**
-     * get measures from the measure table in the database according to params
+     * get data from the table in the database according to the params and the expected IotObject
      * @param Croak\Iot\Databases\DbManagement $db the database connector
-     * @param Croak\Iot\Databases\IotQueries $queries the queries to select measures
-     * @param array $params parameters for the query to indicate a type, a date ore something else
+     * @param String $query the query to select data in database
+     * @param array $params parameters for the query to indicate filters or sorting
+     * @param Croak\Iot\IotObject $iotObject 
      * @throws DataBaseException     error in connecting to the database
-     * @return array of Measures
+     * @return mixed array containing key/value pair defininf an IotObject
      */
-    public function getMeasures(DbManagement $db, IotQueries $queries, $params)
-    {
+    public function getData(DbManagement $db, $query, $params, IotObject $iotObject)
+    {       
+        $keys = $iotObject->getKeys();
+
         //parse params to check their validity and 
         //use the conventions to sort and filter results
-        $parsed = $this->parseParams($params);
-
-        //prepare query
-        $query = $queries->selectMeasures();
+        $parsed = $this->parseParams($params, $keys, $iotObject->getTypes());
+        
+        $array=[];
 
         //if valid params have been detected
         //query is filled in with arguments
@@ -50,31 +53,31 @@ class TableMeasures
                 switch($type){
                     case "min":
                         foreach ($values as $key => $val) {
-                            $min = Measure::KEYS[$key]."-min";
-                            $db->sortMin($query,Measure::KEYS[$key],$min);
+                            $min = $keys[$key]."-min";
+                            $db->sortMin($query,$keys[$key],$min);
                             $array[]=$val;
                         }
                         break;
                     case "max":
                         foreach ($values as $key => $val) {
-                            $max = Measure::KEYS[$key]."-max";
-                            $db->sortMax($query,Measure::KEYS[$key],$max);
+                            $max = $keys[$key]."-max";
+                            $db->sortMax($query,$keys[$key],$max);
                             $array[]=$val;
                         }
                         break;
                     case "up":
                         foreach ($values as $val) {
-                            $db->orderUp($query,Measure::KEYS[$val]);
+                            $db->orderUp($query,$keys[$val]);
                         }
                         break;
                     case "down":
                         foreach ($values as $val) {
-                            $db->orderDown($query,Measure::KEYS[$val]);
+                            $db->orderDown($query,$keys[$val]);
                         }
                         break;
                     case "equals":
                         foreach ($values as $key => $val) {
-                            $db->sort($query,Measure::KEYS[$key], Measure::KEYS[$key]);
+                            $db->sort($query,$keys[$key], $keys[$key]);
                             $array[]=$val;
                         }
                         break;
@@ -87,17 +90,15 @@ class TableMeasures
 
         $answer = $db->query($query, $array);
 
-        $measures = [];
-
+        $args=[];
         while ($row = $answer->fetch(\PDO::FETCH_ASSOC)) {
-            foreach (MEASURE::KEYS as $key => $val) {
-                $argsMeasure[$val]=$row[$val];
+            foreach ($keys as $key => $val) {
+                $argsIotObject[$val]=$row[$val];
             }
-
-            $measures[]=Measure::create($argsMeasure);
+            $args[] = $argsIotObject;
         }
-        
-        return $measures;
+
+        return $args;
     }
 
     /**
@@ -106,26 +107,24 @@ class TableMeasures
     * then $params is a table like 
     * ["type"=>"temperature", "value-min"=>"24",  "value-up"=>""]
     * it should be parsed thanks to the specific syntax (-min, -max, -up, -down)
-    * and each key/value of the table is checked thanks to the constants
-    * KEYS and KEY_TYPES of the Measure Object
+    * and each key/value of the table is checked thanks to the expected types
     * @param array $params the array of arguments
+    * @param array $types the array of expected types. Params and types should have the same keys
     * @return array parsed array with keys "min, max, up, down, equals" according
     * to the argument syntax. Each key addresses an array of value-type=>value
     */
-    private function parseParams($params)
+    private function parseParams($params, $keys, $types)
     {
         $array = array();
 
         //First we manage $equals, ie params like type=temperature
-        //type is a key present in MEASURE::KEYS
+        //type is a key present in $keys
         //and $params[type] is set with a non empty String
         //so this is a valid argument
         foreach($params as $key=>$val){
-            $type = Measure::KEY_TYPES[$key];
-            //check if the key is a key for the Measure object, if it is associated with a value and
-            //if the value type is as expected by the Measure Object
-            if (array_key_exists($key, Measure::KEYS) && strlen($val)>0 && $type($val)) {
-                $array["equals"][$key]=$this->convertValue($val, $type);
+            //check if the key is a key for the object, if it is associated with a value
+            if (array_key_exists($key, $keys) && strlen($val)>0) {
+                $array["equals"][$key]=$this->convertValue($val, $types[$key]);;
             }
         }
 
@@ -155,13 +154,13 @@ class TableMeasures
             foreach($$name as $val){
                 //from a String like value-min, we extract $key=value
                 $key = substr($val,0,strlen($val)-strlen($name)-1);
-                //check if the key is a key for the Measure object, if it is associated with a value and
-                //if the value type is as expected by the Measure Object
-                if (array_key_exists($key, Measure::KEYS) && 
+                //check if the key is a key for the object, if it is associated with a value and
+                //if the value type is as expected by the Object
+                if (array_key_exists($key, $keys) && 
                         strlen($params[$val])>0 &&
                         is_numeric($params[$val])
                     ){
-                    $array[$name][$key] = $this->convertValue($params[$val], "is_numeric");
+                    $array[$name][$key] = $this->convertValue($params[$val], $types[$key]);
                 }
             }
         }
@@ -171,7 +170,7 @@ class TableMeasures
         foreach($var_names as $name){
             foreach($$name as $val){
                 $key = substr($val,0,strlen($val)-strlen($name)-1);
-                if (array_key_exists($key, Measure::KEYS)) {
+                if (array_key_exists($key, $keys)) {
                     $array[$name][] = $key;
                 }
             }
@@ -190,6 +189,9 @@ class TableMeasures
 
         switch($type){
             case "is_numeric":
+                $value = floatval($value);
+                break;
+            case "is_float":
                 $value = floatval($value);
                 break;
             case "is_string":

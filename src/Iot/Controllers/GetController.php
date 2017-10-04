@@ -4,12 +4,9 @@ namespace Croak\Iot\Controllers;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Croak\Iot\IoTRequests;
-use Croak\Iot\Exceptions\DeviceException;
-use Croak\Iot\Exceptions\MeasureException;
+use Croak\Iot\Exceptions\IotException;
 use Croak\Iot\Exceptions\DataBaseException;
 use Croak\Iot\Exceptions\InitException;
-use Croak\Iot\Device;
-use Croak\Iot\Measure;
 
 /**
 * Controller for routes based on "GET" requests
@@ -17,66 +14,60 @@ use Croak\Iot\Measure;
 class GetController extends Controller
 {
     /**
-    * Request device information based on device serial number ($args['sn'])
+    * Request device information
     * @param Psr\Http\Message\ServerRequestInterface $request
     * @param Psr\Http\Message\ResponseInterface $response
     * @param array args request arguments
     * @return a http response containing data about device as a json file or an error status if 
     * problems occur with database or if the device has not been found
+    * @throws Croak\Iot\IotException
     */
     public function getDevices(Request $request, Response $response, $args){
-        $sn = (string)$args['sn'];
-        $this->debug("get profile for $sn");
-
-        try{
-            $device = IoTRequests::getDevice($sn, $this->getConfig(), $this->getDataBase());
-            if($device==null){
-                return $this->requestError($response, "device sn does not exist");
-            }
-            $data = $device->getAllData();
-            return $this->sendJson($response, $data);
-        }
-        catch(DeviceException $e){
-            return $this->requestError($response, $e->getMessage());
-        }
-        catch(DatabaseException $e){
-            return $this->requestError($response, $e->getMessage());
-        }
-        catch(InitException $e){
-            return $this->requestError($response, $e->getMessage());
-        }
+        return $this->get($request, $response, $args, "device");
     }
 
     /**
-    * Request measures based on device serial number ($args['sn']). 
+    * Request measure information
+    * @param Psr\Http\Message\ServerRequestInterface $request
+    * @param Psr\Http\Message\ResponseInterface $response
+    * @param array args request arguments
+    * @return a http response containing data about measure as a json file or an error status if 
+    * problems occur with database
+    * @throws Croak\Iot\IotException
+    */
+    public function getMeasures(Request $request, Response $response, $args){
+        return $this->get($request, $response, $args, "measure");
+    }
+
+    /**
+    * Request information from database
     * Params to sort data can be applied thanks to the params associated with the request.
     * for example /measures/{sn}?sort=date&order=desc&type="temperature"
     * @param Psr\Http\Message\ServerRequestInterface $request
     * @param Psr\Http\Message\ResponseInterface $response
     * @param array args request arguments
-    * @return a http response containing data about measures as a json file or an error status if 
+    * @param String $type type of information  : has to be a key of the Croak/Iot/IoTRequests::TYPES constant
+    * @return a http response containing data as a json file or an error status if 
     * problems occur with database or if the device has not been found
     */
-    public function getMeasures(Request $request, Response $response, $args){
+    private function get(Request $request, Response $response, $args, $type){
 
         $params = $request->getQueryParams();
-        if(!array_key_exists("deviceSn",$params)){
-            if(!array_key_exists("sn",$args)){
-                return $this->requestError($response, "no device associated with measure");
-            }
+
+        if(array_key_exists("sn",$args)){
             $params["deviceSn"] = (string)$args['sn'];
         }
 
         try{
-            $measures = IoTRequests::getMeasures($this->getDataBase(), $this->getQueries(), $params);
+            $iotObjects = IoTRequests::get($this->getDataBase(), $this->getQueries(), $params, $type);
 
             $data = [];
-            foreach($measures as $key=>$val){
-                $data[] = $val->getValues();;
+            foreach($iotObjects as $key=>$val){
+                $data[] = $val->getValues();
             }
             return $this->sendJson($response, $data);
         }
-        catch(MeasureException $e){
+        catch(IotException $e){
             return $this->requestError($response, $e->getMessage());
         }
         catch(DatabaseException $e){

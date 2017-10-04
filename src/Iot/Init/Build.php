@@ -53,11 +53,10 @@ class Build{
         }
 
         $query = $queries->createMeasureTable();
-
-
         $measuresCreated = $db->query($query);
-        // $query = $queries->createDeviceTable();
-        // $devicesCreated = $db->query($query);
+        
+        $query = $queries->createDeviceTable();
+        $devicesCreated = $db->query($query);
         // $query = $queries->createUserTable();
         // $usersCreated = $db->query($query);
 

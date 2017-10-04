@@ -11,7 +11,7 @@ interface IotQueries
     *@var String  constants to name the tables
     */
     const MEASURES_TABLE_NAME = "measures";
-    const DEVICES_TABLE_NAME = "device";
+    const DEVICES_TABLE_NAME = "devices";
     const USERS_TABLE_NAME = "users";
 
     /**

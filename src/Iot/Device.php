@@ -2,12 +2,12 @@
 
 namespace Croak\Iot;
 
-use Croak\Iot\Exceptions\DeviceException;
+use Croak\Iot\Exceptions\IotException;
 
 /**
  * Describes a Device thanks to a set of parameters
  */
-class Device
+class Device extends IotObject
 {
 /**
     *@var Array  KEYS  key names expected in params file
@@ -15,7 +15,8 @@ class Device
     const KEYS = array(
         "deviceSn"=>"sn",
         "date"=>"created",
-        "idUser"=>"idUser"
+        "name"=>"name",
+        "idUser"=>"id_user"
     );
 
     /**
@@ -24,6 +25,7 @@ class Device
     const KEY_TYPES = array(
         "deviceSn"=>"is_string",
         "date"=>"is_string",
+        "name"=>"is_string",
         "idUser"=>"is_int"
     );
 
@@ -33,6 +35,7 @@ class Device
     const KEY_REQUIRED = array(
         "deviceSn"=>true,
         "date"=>true,
+        "name"=>false,
         "idUser"=>false
     );
 
@@ -42,67 +45,43 @@ class Device
     const KEY_UNIQUE = array(
         "deviceSn"=>true,
         "date"=>false,
+        "name"=>false,
         "idUser"=>false
     );
 
     /**
-    *@var Array $values values of the device object
+    * getter of keys defining the IotObject
+    * These keys should be defined as a constant of the IotObject
+    * @return array of String 
     */
-    private $values = array();
-
-    /** 
-    * private constructor : building the object
-    * should be done by calling create()
-    * @param mixed $params        the decoded params string 
-    */
-    private function __construct($params){
-        foreach (Device::KEYS as $key=>$val) {
-            $this->values[$val] = $params[$val];
-        }            
+    public function getKeys(){
+        return Device::KEYS;
     }
-        
-    /** 
-    * build the Device Object if the key/value of the params file are correct
-    * @param params $params             the params string containing device parameters
-    * @return a new Device Object
-    * @throws DeviceException when a parameter for the device object is missing in the params string
+    
+    /**
+    * getter of Types associated with the keys defining the IotObject
+    * types are test function names like is_string, is_float, is_int, is_numeric, ...
+    * @return array of String 
     */
-    public static function create($params){
-
-        foreach (Device::KEYS as $key=>$val) {            
-            if(!array_key_exists($val, $params)){
-                throw new DeviceException(DeviceException::MISSING_KEY);
-            }
-        }
-        foreach (Device::KEYS as $key=>$val) {
-            if(!isset($params[$val])){
-                throw new MeasureException(DeviceException::MISSING_VALUE);
-            }
-            if($key==="deviceSn" & !preg_match($snPattern, $params[$val])) {
-                throw new DeviceException(DeviceException::DEVICE_SN);
-            }
-        }
-
-        return new Device($params);
+    public function getTypes(){
+        return Device::KEY_TYPES;
     }
 
     /**
-    * getter of a device parameter
-    * @return mixed        device parameter value
+    * getter of the array of boolean defining if the value assosiated with the key is required (true)
+    * when populating the database 
+    * @return array of boolean 
     */
-    public function getValue($key){
-        if(!array_key_exists($key, $this->values)){
-            throw new DeviceException(DeviceException::UNEXISTING_KEY);
-        }
-        return $this->values[$val];
+    public function getRequiredKeys(){
+        return Device::KEY_REQUIRED;
     }
 
     /**
-    * getter of device array
-    * @return array        device array
+    * getter of the array of boolean defining if the value assosiated with the key should be unique (true)
+    * when populating the database 
+    * @return array of boolean 
     */
-    public function getValues(){
-        return $this->values;
+    public function getUniqueKeys(){
+        return Device::KEY_UNIQUE;
     }
-
 }

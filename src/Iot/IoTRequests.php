@@ -1,9 +1,9 @@
 <?php
 
 namespace Croak\Iot;
-use Croak\Iot\Databases\TableDevices;
+
+use Croak\Iot\Databases\IotTable;
 use Croak\Iot\Device;
-use Croak\Iot\Databases\TableMeasures;
 use Croak\Iot\Measure;
 use Croak\Iot\Databases\DbManagement;
 use Croak\Iot\Databases\IotQueries;
@@ -12,6 +12,12 @@ use Croak\Iot\Databases\IotQueries;
  * Manages the requests addressed by the routes. 
  */
 class IoTRequests{
+
+    const TYPES=[
+        "measure"=>"getMeasures",
+        "device"=>"getDevices",
+        "user"=>"getUsers"
+    ];
 
     /**
      * Manages a new entry for measure associated with a given device
@@ -30,6 +36,7 @@ class IoTRequests{
       
         #TODO il faudra modifier cela : le device doit être créé indépendamment et on devra vérifier 
         #TODO qu'il existe avant d'ajouter une mesure
+        #TODO on vérifiera en même temps si son sn respecte le pattern
         $device = Device::create($sn, $config->getSnPattern());
 
         $tableDevice = new TableDevices($device); 
@@ -44,22 +51,40 @@ class IoTRequests{
         return $id;
     }
 
+
     /**
-     * Manages a request for delivering measures associated with a given device
+     * Manages a request for delivering iotObjects
      *
-     * @param string $sn            the device sn
      * @param Croak\Iot\Databases\DbManagement $db the database connector
      * @param $params array of parameters from the http request
-     * @throws DeviceException      The device SN does not comply with SnPattern in api-config.params
-     * @throws MeasureException     Error on the passed key/value  pair for measure
+     * @throws IotException     Error on the passed key/value  pair for measure
      * @throws DataBaseException    Error while connecting to the database
      */
-     public static function getMeasures(DbManagement $db, IotQueries $queries, $params){
+     public static function get(DbManagement $db, IotQueries $queries, $params, $type){
+        
+            $table = new IotTable();
+            $function = IoTRequests::TYPES[$type];
 
-        $tableMeasures = new TableMeasures();
-        $measures = $tableMeasures->getMeasures($db, $queries, $params);
+            return IoTRequests::$function($table, $db, $queries, $params);            
+    }
 
-        $db->disconnect();
+    /**
+     * Manages a request for delivering measures
+     *
+     * @param Croak\Iot\Databases\DbManagement $db the database connector
+     * @param $params array of parameters from the http request
+     * @throws IotException     Error on the passed key/value  pair for measure
+     * @throws DataBaseException    Error while connecting to the database
+     */
+     private static function getMeasures(IotTable $table, DbManagement $db, IotQueries $queries, $params){
+
+        $argMeasures = $table->getData($db, $queries->selectMeasures(), $params, new Measure(null));        
+        
+        $measures = [];
+        foreach($argMeasures as $val){
+            $measures[]=new Measure($val);
+        }
+
         return $measures;
       }
 
@@ -67,24 +92,23 @@ class IoTRequests{
      * Manages a request for information on device
      * if the device does not exist, a DeviceException occurs
      *
-     * @param string $sn            the device sn
-     * @param Config $config        the configuration of the app
      * @param Croak\Iot\Databases\DbManagement $db the database connector
-     * @throws DeviceException      The device does not comply with SnPattern in api-config.params or does not exist
+     * @param $params               array of parameters from the http request
+     * @throws IotException         Error on the passed key/value  pair for device or if the 
+     *                              device sn does not comply with the configured sn pattern
      * @throws DataBaseException    Error while connecting to the database
      */
-    public static function getDevice($sn, $config, $db, IotQueries $queries){
+     private static function getDevices(IotTable $table, DbManagement $db, IotQueries $queries, $params){
 
-        $device = Device::create($sn, $config->getSnPattern());
-        $tableDevice = new TableDevices($device);   
-        $deviceExists = $tableDevice->updateDeviceInformation($db);
-        $db->disconnect();
+        $argDevices = $table->getData($db, $queries->selectDevices(), $params, new Device(null));
 
-        if(!$deviceExists){
-            $device = null;
+        $devices = [];
+        foreach($argDevices as $val){
+            $dev=new Device($val);
+            $devices[] = $dev;
         }
-                
-        return $device;        
+
+        return $devices;       
     }
 
 }
