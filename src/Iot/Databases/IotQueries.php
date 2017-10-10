@@ -39,10 +39,22 @@ interface IotQueries
     public function selectDevices();
 
     /**
+    * adding a device in database
+    * @return boolean true if device has been added
+    */
+    public function addDevice();
+
+    /**
     * measures selection
     * @return String query to select the measures
     */
     public function selectMeasures();
+
+    /**
+    * adding a measure in database
+    * @return boolean true if measure has been added
+    */
+    public function addMeasure();
 
     /**
     * users selection

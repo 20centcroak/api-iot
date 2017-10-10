@@ -41,7 +41,7 @@ $app->get('/measures', Croak\Iot\Controllers\GetController::class.':getMeasures'
 *
 * if device does not exist, it will be automatically created **** THIS SHOULD BE MODIFIED*****
 * we should avoid bombing by creating a lot of devices or measures
-* configuration of the app should control the way the tables are accessed
-* the use of tokens is recommended: see here https://www.slimframework.com/docs/features/csrf.html
+* The best would be to associate an authentification of the devices and authorise
+* to access this post route if authentification is ok
 */
 $app->post('/devices/{sn}/measures', Croak\Iot\Controllers\PostController::class.':postMeasure');

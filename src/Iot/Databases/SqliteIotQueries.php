@@ -67,11 +67,27 @@ class SqliteIotQueries implements IotQueries
     }
 
     /**
+    * adding a device in database
+    * @return boolean true if device has been added
+    */
+    public function addDevice(){
+        return SqliteIotQueries::ADD_DEVICE;
+    }
+
+    /**
     * measures selection
     * @return String query to select the measures
     */
     public function selectMeasures(){
         return SqliteIotQueries::GET_MEASURES;
+    }
+
+    /**
+    * adding a measure in database
+    * @return boolean true if measure has been added
+    */
+    public function addMeasure(){
+        return SqliteIotQueries::ADD_MEASURE;
     }
 
     /**

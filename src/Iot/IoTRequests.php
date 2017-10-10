@@ -13,7 +13,13 @@ use Croak\Iot\Databases\IotQueries;
  */
 class IoTRequests{
 
-    const TYPES=[
+    const POST_TYPES=[
+        "measure"=>"postMeasure",
+        "device"=>"postDevice",
+        "user"=>"postUser"
+    ];
+
+    const GET_TYPES=[
         "measure"=>"getMeasures",
         "device"=>"getDevices",
         "user"=>"getUsers"
@@ -32,20 +38,27 @@ class IoTRequests{
      * @throws MeasureException     Error on the passed key/value  pair for measure
      * @throws DataBaseException    Error while connecting to the database
      */
-    public static function postMeasure($sn, $params, $config, DbManagement $db, IotQueries $queries){
+    public static function post(DbManagement $db, IotQueries $queries, $params, $type){
+        $table = new IotTable();
+        $function = IoTRequests::POST_TYPES[$type];
+
+        return IoTRequests::$function($table, $db, $queries, $params);   
+    }
+
+    public static function postMeasure(IotTable $table, DbManagement $db, IotQueries $queries, $params){
       
         #TODO il faudra modifier cela : le device doit être créé indépendamment et on devra vérifier 
         #TODO qu'il existe avant d'ajouter une mesure
         #TODO on vérifiera en même temps si son sn respecte le pattern
-        $device = Device::create($sn, $config->getSnPattern());
-
-        $tableDevice = new TableDevices($device); 
-        $tableDevice->addDevice($db);
+        $deviceParams = [];
+        $deviceParams[Device::KEYS["deviceSn"]] = $params[Measure::KEYS["deviceSn"]];
+        $deviceParams[Device::KEYS["date"]] = $params[Measure::KEYS["date"]];
+        $device = new Device($deviceParams);
+        $table->populate($db, $device, $queries->addDevice());
 
         $measure;
-        $measure = Measure::create($params);
-        $tableMeasures = new TableMeasures();
-        $id = $tableMeasures->populate($db, $measure);
+        $measure = new Measure($params);
+        $id = $table->populate($db, $measure, $queries->addMeasure());
 
         $db->disconnect();
         return $id;
@@ -63,7 +76,7 @@ class IoTRequests{
      public static function get(DbManagement $db, IotQueries $queries, $params, $type){
         
             $table = new IotTable();
-            $function = IoTRequests::TYPES[$type];
+            $function = IoTRequests::GET_TYPES[$type];
 
             return IoTRequests::$function($table, $db, $queries, $params);            
     }

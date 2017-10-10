@@ -74,6 +74,26 @@ class DbManagementSqLite implements DbManagement
     }
 
     /**
+     * request to add an IotObject in its table
+     * manage its database fields thanks to its keys and build the query
+     * @param String $query     the query to modify, it is passed as a reference
+     * @param array $keys       the keys of the object to insert in the corresponding fields
+     */
+    public function add(&$query, $keys){
+        $keyString=" (";
+        $valString="VALUES ";
+        foreach($keys as $key){
+            $keyString = $keyString.$key.", ";
+            $valString = $valString."?, ";
+        }
+        substr_replace($keyString,") ",strlen($keyString-3),-1);
+        substr_replace($valString,")", strlen($valString-4),-1);
+        $query = $query.$keyString.$valString;
+        var_dump($query);
+        die;
+    }
+
+    /**
     * request with a min param : for example /measures?value-min=28
     * min param is valueMin=28, it means that the database query will only 
     * return values >= 28

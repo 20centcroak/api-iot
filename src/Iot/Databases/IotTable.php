@@ -22,6 +22,8 @@ class IotTable
      */
     public function populate(DbManagement $db, IotObject $object, $query)
     {
+        $keys = array_values($iotObject->getKeys());
+        $db->add($query, $keys);
         $array = $object->getValues();
         $db->query($query, $array);
         return $db->lastInsertId();

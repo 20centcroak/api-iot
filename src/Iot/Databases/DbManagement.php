@@ -27,6 +27,15 @@ interface DbManagement
     public function query($query, $data);
 
     /**
+     * request to add an IotObject in its table
+     * manage its database fields thanks to its keys and build
+     * the query
+     * @param String $query     the query to modify, it is passed as a reference
+     * @param array $keys       the keys of the object to insert in the corresponding fields
+     */
+    public function add(&$query, $keys);
+
+    /**
     * request with a min param : for example /measures?value-min=28
     * min param is valueMin=28, it means that the database query will only 
     * return values >= 28
