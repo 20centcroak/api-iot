@@ -62,9 +62,9 @@ class Build{
 
         $db->disconnect();
 
-        // if($devicesCreated===false){
-        //     throw new BuildException(BuildException::INIT_TABLE_DEVICE_FAILED);
-        // }
+        if($devicesCreated===false){
+            throw new BuildException(BuildException::INIT_TABLE_DEVICE_FAILED);
+        }
         // if($usersCreated===false){
         //     throw new BuildException(BuildException::INIT_TABLE_USER_FAILED);
         // }

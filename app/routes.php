@@ -44,4 +44,4 @@ $app->get('/measures', Croak\Iot\Controllers\GetController::class.':getMeasures'
 * The best would be to associate an authentification of the devices and authorise
 * to access this post route if authentification is ok
 */
-$app->post('/devices/{sn}/measures', Croak\Iot\Controllers\PostController::class.':postMeasure');
+$app->post('/measure/{sn}', Croak\Iot\Controllers\PostController::class.':postMeasure');

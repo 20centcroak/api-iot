@@ -46,7 +46,7 @@ class IoTRequests{
     }
 
     public static function postMeasure(IotTable $table, DbManagement $db, IotQueries $queries, $params){
-      
+
         #TODO il faudra modifier cela : le device doit être créé indépendamment et on devra vérifier 
         #TODO qu'il existe avant d'ajouter une mesure
         #TODO on vérifiera en même temps si son sn respecte le pattern

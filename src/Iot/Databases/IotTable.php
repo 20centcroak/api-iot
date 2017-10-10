@@ -20,11 +20,11 @@ class IotTable
      * @throws DataBaseException     error in connecting to the database
      * @return id of the record
      */
-    public function populate(DbManagement $db, IotObject $object, $query)
+    public function populate(DbManagement $db, IotObject $iotObject, $query)
     {
         $keys = array_values($iotObject->getKeys());
         $db->add($query, $keys);
-        $array = $object->getValues();
+        $array = array_values($iotObject->getValues());
         $db->query($query, $array);
         return $db->lastInsertId();
     }

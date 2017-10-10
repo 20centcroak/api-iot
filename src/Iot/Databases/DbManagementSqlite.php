@@ -62,6 +62,7 @@ class DbManagementSqLite implements DbManagement
     public function query($query, $arrayData = array())
     {
         try {
+
             $request = $this->pdo->prepare($query);
             $ok = $request->execute($arrayData);
             if (!$ok) {
@@ -81,16 +82,15 @@ class DbManagementSqLite implements DbManagement
      */
     public function add(&$query, $keys){
         $keyString=" (";
-        $valString="VALUES ";
+        $valString="VALUES (";
         foreach($keys as $key){
             $keyString = $keyString.$key.", ";
             $valString = $valString."?, ";
         }
-        substr_replace($keyString,") ",strlen($keyString-3),-1);
-        substr_replace($valString,")", strlen($valString-4),-1);
+        $keyString = substr_replace($keyString,") ",strlen($keyString)-2,-1);
+        $valString = substr_replace($valString,")", strlen($valString)-2,-1);
         $query = $query.$keyString.$valString;
-        var_dump($query);
-        die;
+
     }
 
     /**

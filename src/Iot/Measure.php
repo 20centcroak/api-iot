@@ -55,7 +55,7 @@ class Measure extends IotObject{
         "type"=>false,
         "unit"=>false,
         "value"=>false,
-        "MeasureSn"=>false,
+        "deviceSn"=>false,
         "date"=>false
     );
  

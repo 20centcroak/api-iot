@@ -22,12 +22,18 @@ abstract class IotObject{
     */
     public function __construct($params){
 
-        $keys = $this->getKeys();
-        if (isset($params) && $this->check($params)){
-            foreach ($keys as $key=>$val) {
+        if (isset($params)){
+            $this->checkRequired($params);
+            $keys = $this->getKeys();
+            foreach ($keys as $key => $val) {
+                if (!isset($params[$val])){
+                    $params[$val] = "";
+                }
                 $this->values[$val] = $params[$val];
             }
-        }     
+        }
+
+         
     }
 
     /** 
@@ -36,7 +42,7 @@ abstract class IotObject{
     * @return boolean true if check is ok, throws an Exception otherwise
     * @throws Exception when a parameter for the object is missing in the params string
     */
-    private function check($params){
+    private function checkRequired($params){
 
         $keys = $this->getKeys();
         $required = $this->getRequiredKeys();
