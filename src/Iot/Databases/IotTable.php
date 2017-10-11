@@ -15,13 +15,13 @@ class IotTable
     /**
      * add an Object to the table in the database
      * @param Croak\Iot\Databases\DbManagement $db the database connector
-     * @param Croak\Iot\IotObject $object the IotObject containing all needed data to populate database
+     * @param Croak\Iot\IotObject $iotObject the IotObject containing all needed data to populate database
      * @param String $query the query to populate database
      * @throws DataBaseException     error in connecting to the database
      * @return id of the record
      */
     public function populate(DbManagement $db, IotObject $iotObject, $query)
-    {
+    {         
         $keys = array_values($iotObject->getKeys());
         $db->add($query, $keys);
         $array = array_values($iotObject->getValues());

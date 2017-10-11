@@ -16,6 +16,8 @@ class Device extends IotObject
         "deviceSn"=>"sn",
         "date"=>"created",
         "name"=>"name",
+        "type"=>"type",
+        "version"=>"version",
         "idUser"=>"id_user"
     );
 
@@ -26,6 +28,8 @@ class Device extends IotObject
         "deviceSn"=>"is_string",
         "date"=>"is_string",
         "name"=>"is_string",
+        "type"=>"is_string",
+        "version"=>"is_string",
         "idUser"=>"is_int"
     );
 
@@ -36,6 +40,8 @@ class Device extends IotObject
         "deviceSn"=>true,
         "date"=>true,
         "name"=>false,
+        "type"=>false,
+        "version"=>false,
         "idUser"=>false
     );
 
@@ -46,6 +52,8 @@ class Device extends IotObject
         "deviceSn"=>true,
         "date"=>false,
         "name"=>false,
+        "type"=>false,
+        "version"=>false,
         "idUser"=>false
     );
 

@@ -26,16 +26,13 @@ class IoTRequests{
     ];
 
     /**
-     * Manages a new entry for measure associated with a given device
-     * if the device does not exist, it will be created if it complies with the sn pattern
+     * Manages a new entry
      *
-     * @param string $sn            the device sn
-     * @param params $params            a params object containing the measure parameters
-     * @param Config $config        the configuration of the app
      * @param Croak\Iot\Databases\DbManagement $db the database connector
-     *
-     * @throws DeviceException      The device SN does not comply with SnPattern in api-config.params
-     * @throws MeasureException     Error on the passed key/value  pair for measure
+     * @param Croak\Iot\Databases  IotQueries $type     the queries to be used with the database
+     * @param params $params                            a params object containing the measure parameters
+     * @param String $type                              one of the type listed in the const POST_TYPES
+     * @throws IotException        the required fields were not found in the $params arrays
      * @throws DataBaseException    Error while connecting to the database
      */
     public static function post(DbManagement $db, IotQueries $queries, $params, $type){
@@ -45,32 +42,55 @@ class IoTRequests{
         return IoTRequests::$function($table, $db, $queries, $params);   
     }
 
+    /**
+     * Manages a new entry for measure associated with a given device
+     *
+     * @param Croak\Iot\Databases\IotTable $table       the iotTable object to use for quering
+     * @param Croak\Iot\Databases\DbManagement $db      the database connector
+     * @param Croak\Iot\Databases  IotQueries $type     the queries to be used with the database
+     * @param params $params                            a params object containing the measure parameters
+     * @throws IotException        the required fields were not found in the $params arrays
+     * @throws DataBaseException    Error while connecting to the database
+     */
     public static function postMeasure(IotTable $table, DbManagement $db, IotQueries $queries, $params){
 
         #TODO il faudra modifier cela : le device doit être créé indépendamment et on devra vérifier 
         #TODO qu'il existe avant d'ajouter une mesure
         #TODO on vérifiera en même temps si son sn respecte le pattern
-        $deviceParams = [];
         $deviceParams[Device::KEYS["deviceSn"]] = $params[Measure::KEYS["deviceSn"]];
         $deviceParams[Device::KEYS["date"]] = $params[Measure::KEYS["date"]];
-        $device = new Device($deviceParams);
-        $table->populate($db, $device, $queries->addDevice());
+        $table->populate($db,new Device($deviceParams), $queries->addDevice());
 
-        $measure;
-        $measure = new Measure($params);
-        $id = $table->populate($db, $measure, $queries->addMeasure());
+        $id = $table->populate($db, new Measure($params), $queries->addMeasure());
 
+        $db->disconnect();
+        return $id;
+    }
+
+    /**
+     * Manages a new entry for user associated with a given device
+     *
+     * @param Croak\Iot\Databases\IotTable $table       the iotTable object to use for quering
+     * @param Croak\Iot\Databases\DbManagement $db      the database connector
+     * @param Croak\Iot\Databases  IotQueries $type     the queries to be used with the database
+     * @param params $params                            a params object containing the measure parameters
+     * @throws IotException        the required fields were not found in the $params arrays
+     * @throws DataBaseException    Error while connecting to the database
+     */
+    public static function postUser(IotTable $table, DbManagement $db, IotQueries $queries, $params){
+        $id = $table->populate($db,  new User($params), $queries->addUser());        
         $db->disconnect();
         return $id;
     }
 
 
     /**
-     * Manages a request for delivering iotObjects
+     * Manages request for delivering iotObject
      *
      * @param Croak\Iot\Databases\DbManagement $db the database connector
-     * @param $params array of parameters from the http request
-     * @throws IotException     Error on the passed key/value  pair for measure
+     * @param Croak\Iot\Databases  IotQueries $type     the queries to be used with the database
+     * @param params $params                            a params object containing the measure parameters
+     * @param String $type                              one of the type listed in the const POST_TYPES
      * @throws DataBaseException    Error while connecting to the database
      */
      public static function get(DbManagement $db, IotQueries $queries, $params, $type){
@@ -84,9 +104,10 @@ class IoTRequests{
     /**
      * Manages a request for delivering measures
      *
-     * @param Croak\Iot\Databases\DbManagement $db the database connector
-     * @param $params array of parameters from the http request
-     * @throws IotException     Error on the passed key/value  pair for measure
+     * @param Croak\Iot\Databases\IotTable $table       the iotTable object to use for quering
+     * @param Croak\Iot\Databases\DbManagement $db      the database connector
+     * @param Croak\Iot\Databases  IotQueries $type     the queries to be used with the database
+     * @param params $params                            a params object containing the measure parameters
      * @throws DataBaseException    Error while connecting to the database
      */
      private static function getMeasures(IotTable $table, DbManagement $db, IotQueries $queries, $params){
@@ -103,12 +124,12 @@ class IoTRequests{
 
     /**
      * Manages a request for information on device
-     * if the device does not exist, a DeviceException occurs
+     * if the device does not exist, a IotException occurs
      *
-     * @param Croak\Iot\Databases\DbManagement $db the database connector
-     * @param $params               array of parameters from the http request
-     * @throws IotException         Error on the passed key/value  pair for device or if the 
-     *                              device sn does not comply with the configured sn pattern
+     * @param Croak\Iot\Databases\IotTable $table       the iotTable object to use for quering
+     * @param Croak\Iot\Databases\DbManagement $db      the database connector
+     * @param Croak\Iot\Databases  IotQueries $type     the queries to be used with the database
+     * @param params $params                            a params object containing the measure parameters
      * @throws DataBaseException    Error while connecting to the database
      */
      private static function getDevices(IotTable $table, DbManagement $db, IotQueries $queries, $params){
@@ -123,5 +144,28 @@ class IoTRequests{
 
         return $devices;       
     }
+
+    /**
+     * Manages a request for information on user
+     * if the user does not exist, a IotException occurs
+     *
+     * @param Croak\Iot\Databases\IotTable $table       the iotTable object to use for quering
+     * @param Croak\Iot\Databases\DbManagement $db      the database connector
+     * @param Croak\Iot\Databases  IotQueries $type     the queries to be used with the database
+     * @param params $params                            a params object containing the measure parameters
+     * @throws DataBaseException    Error while connecting to the database
+     */
+    private static function getUsers(IotTable $table, DbManagement $db, IotQueries $queries, $params){
+        
+                $argUsers = $table->getData($db, $queries->selectUsers(), $params, new User(null));
+        
+                $users = [];
+                foreach($argUsers as $val){
+                    $user=new User($val);
+                    $users[] = $user;
+                }
+        
+                return $users;       
+            }
 
 }

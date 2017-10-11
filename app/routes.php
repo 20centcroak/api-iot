@@ -26,6 +26,11 @@ $app->get('/devices/{sn}', Croak\Iot\Controllers\GetController::class.':getDevic
 $app->get('/devices', Croak\Iot\Controllers\GetController::class.':getDevices');
 
 /** 
+* get all users
+*/
+$app->get('/users', Croak\Iot\Controllers\GetController::class.':getUsers');
+
+/** 
 * get measures for the device named by it sn
 */
 $app->get('/measures/{sn}', Croak\Iot\Controllers\GetController::class.':getMeasures');
@@ -45,3 +50,8 @@ $app->get('/measures', Croak\Iot\Controllers\GetController::class.':getMeasures'
 * to access this post route if authentification is ok
 */
 $app->post('/measure/{sn}', Croak\Iot\Controllers\PostController::class.':postMeasure');
+
+/** 
+* post user in the database thanks to a POST request 
+*/
+$app->post('/user', Croak\Iot\Controllers\PostController::class.':postUser');

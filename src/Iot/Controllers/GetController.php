@@ -39,6 +39,19 @@ class GetController extends Controller
         return $this->get($request, $response, $args, "measure");
     }
 
+     /**
+    * Request user information
+    * @param Psr\Http\Message\ServerRequestInterface $request
+    * @param Psr\Http\Message\ResponseInterface $response
+    * @param array args request arguments
+    * @return a http response containing data about measure as a json file or an error status if 
+    * problems occur with database
+    * @throws Croak\Iot\IotException
+    */
+    public function getUsers(Request $request, Response $response, $args){
+        return $this->get($request, $response, $args, "user");
+    }
+
     /**
     * Request information from database
     * Params to sort data can be applied thanks to the params associated with the request.

@@ -3,7 +3,6 @@
 namespace Croak\Iot\Databases;
 
 use Croak\Iot\Exceptions\DataBaseException;
-use Croak\Iot\Databases\SqliteQueries;
 
 /**
  * Manages the database: connection, read/write
@@ -16,11 +15,6 @@ class DbManagementSqLite implements DbManagement
     *@var PDO       object to address the database
     */
     private $pdo;
-
-    /**
-    *@var SqliteQueries queries to addres the database
-    */
-    private $queries;
 
     /**
     * connect to the database
@@ -194,17 +188,6 @@ class DbManagementSqLite implements DbManagement
         else{
             return " ORDER BY ";
         }
-    }
-
-    /**
-    * getter for the IotQueries implementation to be used with the database
-    * @return SqliteQueries object
-    */
-    public function getQueries(){
-        if(!isset($this->queries)){
-            $this->queries =  new SqliteQueries();
-        }
-        return $this->queries;
     }
 
     /**

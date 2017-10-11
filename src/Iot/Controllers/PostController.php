@@ -5,8 +5,11 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Croak\Iot\IoTRequests;
 use Croak\Iot\Measure;
+use Croak\Iot\Device;
+use Croak\Iot\User;
 use Croak\Iot\Exceptions\DeviceException;
 use Croak\Iot\Exceptions\MeasureException;
+use Croak\Iot\Exceptions\UserException;
 use Croak\Iot\Exceptions\DataBaseException;
 
 /**
@@ -45,6 +48,35 @@ class PostController extends Controller
 
         $location = $url.'/'.$id;
         $message = "measure added successfully";
+        return $this->createSuccess($response, $location, $message);
+    }
+
+    /**
+    * add user in the database
+    * @param Psr\Http\Message\ServerRequestInterface $request
+    * @param Psr\Http\Message\ResponseInterface $response
+    * @param array args request arguments
+    * @return a http response indicating if the measure has been correctly added or not
+    */
+    public function postUser(Request $request, Response $response, $args){    
+        
+        $url = $request->getUri();
+        $date = date("Y-m-d H:i:s");
+        $params = $request->getParsedBody();  
+        $params[User::KEYS["date"]] = $date;
+
+        try{
+            $id = IoTRequests::post($this->getDataBase(), $this->getQueries(), $params, "user");
+        }
+        catch(UserException $e){
+            return $this->requestError($response, $e->getMessage());
+        }
+        catch(DataBaseException $e){
+            return $this->serverError($response, $e->getMessage());
+        }
+
+        $location = $url.'/'.$id;
+        $message = "user added successfully";
         return $this->createSuccess($response, $location, $message);
     }
 }

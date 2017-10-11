@@ -101,9 +101,4 @@ interface DbManagement
     */
     public function lastInsertId();
 
-    /**
-    * return an object containing queries specific to the database
-    */
-    public function getQueries();
-
 }

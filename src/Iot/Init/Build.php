@@ -57,20 +57,21 @@ class Build{
         
         $query = $queries->createDeviceTable();
         $devicesCreated = $db->query($query);
-        // $query = $queries->createUserTable();
-        // $usersCreated = $db->query($query);
+        
+        $query = $queries->createUserTable();
+        $usersCreated = $db->query($query);
 
         $db->disconnect();
 
-        if($devicesCreated===false){
-            throw new BuildException(BuildException::INIT_TABLE_DEVICE_FAILED);
-        }
-        // if($usersCreated===false){
-        //     throw new BuildException(BuildException::INIT_TABLE_USER_FAILED);
-        // }
         if($measuresCreated===false){
             throw new BuildException(BuildException::INIT_TABLE_MEASURE_FAILED);
         }
+        if($devicesCreated===false){
+            throw new BuildException(BuildException::INIT_TABLE_DEVICE_FAILED);
+        }
+        if($usersCreated===false){
+            throw new BuildException(BuildException::INIT_TABLE_USER_FAILED);
+        }        
 
         $config->setInit(true);
         try{

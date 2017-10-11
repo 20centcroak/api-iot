@@ -4,6 +4,7 @@ namespace Croak\Iot\Databases;
 
 use Croak\Iot\Measure;
 use Croak\Iot\Device;
+use Croak\Iot\User;
 use Croak\Iot\Databases\IotQueries;
 
 /**
@@ -53,10 +54,13 @@ class SqliteIotQueries implements IotQueries
     * @return String query to create the table
     */
     public function createUserTable(){
-        $query = $this->createTable("users");
-        #TODO à poursuivre avec la création d'un objet User
-        return $query;
-    }
+        return $this->createTable("users", 
+                                        User::KEYS, 
+                                        User::KEY_TYPES, 
+                                        User::KEY_REQUIRED, 
+                                        User::KEY_UNIQUE
+    );       
+}
     
     /**
     * devices selection
@@ -98,14 +102,21 @@ class SqliteIotQueries implements IotQueries
         return SqliteIotQueries::GET_USERS;
     }
 
+     /**
+    * adding a user in database
+    * @return boolean true if user has been added
+    */
+    public function addUser(){
+        return SqliteIotQueries::ADD_USER;
+    }
+
     /**
     * all tables are created with the same syntax. 
     * @param $name the table name to create
     * @return String the corresponding query
     */
     private function createTable($name, $keys, $keyTypes, $keyRequired, $keyUnique){
-        $query = SqliteIotQueries::CREATE_TABLE.$name." (id    INTEGER    PRIMARY KEY AUTOINCREMENT";
-        $unique = ", UNIQUE(id";
+        $query = SqliteIotQueries::CREATE_TABLE.$name." (id    INTEGER    UNIQUE   PRIMARY KEY AUTOINCREMENT";
 
         foreach($keys as $key=>$val){
             $query = $query.", $val ";
@@ -114,12 +125,10 @@ class SqliteIotQueries implements IotQueries
                 $query = $query." NOT NULL";
             }
             if($keyUnique[$key]){
-                $unique = $unique.", $val";
+                $query = $query." UNIQUE";
             }
         }
 
-        $unique = $unique.")";
-        $query = $query.$unique;
         $query = $query.");";
         return $query;
      }
@@ -136,6 +145,9 @@ class SqliteIotQueries implements IotQueries
                  break;
              case "is_numeric":
                  return "REAL";
+                 break;
+            case "is_int":
+                 return "INTEGER";
                  break;
          }
      }

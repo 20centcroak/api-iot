@@ -22,6 +22,7 @@ class Measure extends IotObject{
         "type"=>"type",
         "unit"=>"unit",
         "value"=>"value",
+        "flag"=>"flag",
         "deviceSn"=>"id_device",
         "date"=>"created"
     );
@@ -33,6 +34,7 @@ class Measure extends IotObject{
         "type"=>"is_string",
         "unit"=>"is_string",
         "value"=>"is_float",
+        "flag"=>"is_string",
         "deviceSn"=>"is_string",
         "date"=>"is_string"
     );
@@ -44,6 +46,7 @@ class Measure extends IotObject{
         "type"=>true,
         "unit"=>true,
         "value"=>true,
+        "flag"=>false,
         "deviceSn"=>true,
         "date"=>true
     );
@@ -55,6 +58,7 @@ class Measure extends IotObject{
         "type"=>false,
         "unit"=>false,
         "value"=>false,
+        "flag"=>false,
         "deviceSn"=>false,
         "date"=>false
     );
