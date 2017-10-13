@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "54da6ee4cc26fb86f9ba0f435a5b9ad1",
+    "content-hash": "fbbc011a8ca4212a62525418dca72e88",
     "packages": [
         {
             "name": "bshaffer/oauth2-server-php",
@@ -354,16 +354,16 @@
         },
         {
             "name": "croak-dbmanagement/dbmanagement",
-            "version": "1.01",
+            "version": "1.02",
             "source": {
                 "type": "git",
                 "url": "https://github.com/20centcroak/DBManagement.git",
-                "reference": "4c5d0c7df314232e9f2514e48fb6b752362443e0"
+                "reference": "85a0702792e2c32eacf36af24419c759ad4546e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/20centcroak/DBManagement/zipball/4c5d0c7df314232e9f2514e48fb6b752362443e0",
-                "reference": "4c5d0c7df314232e9f2514e48fb6b752362443e0",
+                "url": "https://api.github.com/repos/20centcroak/DBManagement/zipball/85a0702792e2c32eacf36af24419c759ad4546e6",
+                "reference": "85a0702792e2c32eacf36af24419c759ad4546e6",
                 "shasum": ""
             },
             "type": "library",
@@ -388,24 +388,24 @@
                 "database",
                 "pdo"
             ],
-            "time": "2017-10-12T15:19:51+00:00"
+            "time": "2017-10-13T10:08:17+00:00"
         },
         {
             "name": "croak-sqlite-dbmanagement/sqlite-dbmanagement",
-            "version": "1.01",
+            "version": "1.02",
             "source": {
                 "type": "git",
                 "url": "https://github.com/20centcroak/SqliteDbManagement.git",
-                "reference": "a1b1bc7c2e505d56e0317ed7781cbb8de1fae29a"
+                "reference": "91cebc749b51185a105540ff27d6b7eb810ec8b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/20centcroak/SqliteDbManagement/zipball/a1b1bc7c2e505d56e0317ed7781cbb8de1fae29a",
-                "reference": "a1b1bc7c2e505d56e0317ed7781cbb8de1fae29a",
+                "url": "https://api.github.com/repos/20centcroak/SqliteDbManagement/zipball/91cebc749b51185a105540ff27d6b7eb810ec8b2",
+                "reference": "91cebc749b51185a105540ff27d6b7eb810ec8b2",
                 "shasum": ""
             },
             "require": {
-                "croak-dbmanagement/dbmanagement": ">=1.0"
+                "croak-dbmanagement/dbmanagement": ">=1.02"
             },
             "type": "library",
             "autoload": {
@@ -430,7 +430,7 @@
                 "pdo",
                 "sqlite"
             ],
-            "time": "2017-10-12T15:20:22+00:00"
+            "time": "2017-10-13T10:11:51+00:00"
         },
         {
             "name": "doctrine/instantiator",
@@ -2126,16 +2126,16 @@
         },
         {
             "name": "zendframework/zend-diactoros",
-            "version": "1.6.0",
+            "version": "1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-diactoros.git",
-                "reference": "2faa791b66bac33ca40031d8bce03b7dc8143490"
+                "reference": "c8664b92a6d5bc229e48b0923486c097e45a7877"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/2faa791b66bac33ca40031d8bce03b7dc8143490",
-                "reference": "2faa791b66bac33ca40031d8bce03b7dc8143490",
+                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/c8664b92a6d5bc229e48b0923486c097e45a7877",
+                "reference": "c8664b92a6d5bc229e48b0923486c097e45a7877",
                 "shasum": ""
             },
             "require": {
@@ -2174,7 +2174,7 @@
                 "psr",
                 "psr-7"
             ],
-            "time": "2017-09-13T14:47:08+00:00"
+            "time": "2017-10-12T15:24:51+00:00"
         }
     ],
     "packages-dev": [],

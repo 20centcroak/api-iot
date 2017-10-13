@@ -29,7 +29,7 @@ class RootController extends Controller
         //Cette partie appli sera donc développée de manière totalement indépendante avec un framework 
         //front end du type Angular qui enverra des requêtes à cette API et recevra des réponses JSON
 
-        return $response;
+        return $response->getBody()->write("Welcome");
     }
 
     /**
