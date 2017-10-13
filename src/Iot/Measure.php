@@ -1,6 +1,7 @@
 <?php
 
 namespace Croak\Iot;
+
 use Croak\DbManagement\Exceptions\IotException;
 use Croak\DbManagement\DbManagementObject;
 
@@ -14,7 +15,8 @@ use Croak\DbManagement\DbManagementObject;
  * representing the measure
  * the mesaure should be associated with a Measure defined by its serial number
  */
-class Measure extends DbManagementObject{
+class Measure extends DbManagementObject
+{
 
     /**
     *@var Array  KEYS  key names expected in params file
@@ -67,9 +69,10 @@ class Measure extends DbManagementObject{
     /**
     * getter of keys defining the DbManagementObject
     * These keys should be defined as a constant of the DbManagementObject in array KEYS
-    * @return array of String 
+    * @return array of String
     */
-    public function getKeys(){
+    public function getKeys()
+    {
         return constant("self::KEYS");
     }
 
@@ -77,29 +80,32 @@ class Measure extends DbManagementObject{
     * getter of Types associated with the keys defining the DbManagementObject
     * types are test function names like is_string, is_float, is_int, is_numeric, ...
     * These types should be defined as a constant of the DbManagementObject in array KEY_TYPES
-    * @return array of String 
+    * @return array of String
     */
-    public function getTypes(){
+    public function getTypes()
+    {
         return constant("self::KEY_TYPES");
     }
 
     /**
     * getter of the array of boolean defining if the value assosiated with the key is required (true)
-    * when populating the database 
+    * when populating the database
     * These required keys should be defined as a constant of the DbManagementObject in array KEY_REQUIRED
-    * @return array of boolean 
+    * @return array of boolean
     */
-    public function getRequiredKeys(){
+    public function getRequiredKeys()
+    {
         return constant("self::KEY_REQUIRED");
     }
 
     /**
     * getter of the array of boolean defining if the value assosiated with the key should be unique (true)
-    * when populating the database 
+    * when populating the database
     * These unique keys should be defined as a constant of the DbManagementObject in array KEY_UNIQUE
-    * @return array of boolean 
+    * @return array of boolean
     */
-    public function getUniqueKeys(){
+    public function getUniqueKeys()
+    {
         return constant("self::KEY_UNIQUE");
     }
 }

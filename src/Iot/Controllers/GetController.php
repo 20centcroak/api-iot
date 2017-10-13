@@ -39,7 +39,7 @@ class GetController extends Controller
         return $this->get($request, $response, $args, "measure");
     }
 
-     /**
+    /**
     * Request user information
     * @param Psr\Http\Message\ServerRequestInterface $request
     * @param Psr\Http\Message\ResponseInterface $response
