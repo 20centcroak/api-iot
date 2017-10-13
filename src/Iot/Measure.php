@@ -63,40 +63,43 @@ class Measure extends DbManagementObject{
         "deviceSn"=>false,
         "date"=>false
     );
- 
+
     /**
-    * getter of keys defining the IotObject
-    * These keys should be defined as a constant of the IotObject
+    * getter of keys defining the DbManagementObject
+    * These keys should be defined as a constant of the DbManagementObject in array KEYS
     * @return array of String 
     */
     public function getKeys(){
-        return Measure::KEYS;
+        return constant("self::KEYS");
     }
-    
+
     /**
-    * getter of Types associated with the keys defining the IotObject
+    * getter of Types associated with the keys defining the DbManagementObject
     * types are test function names like is_string, is_float, is_int, is_numeric, ...
+    * These types should be defined as a constant of the DbManagementObject in array KEY_TYPES
     * @return array of String 
     */
     public function getTypes(){
-        return Measure::KEY_TYPES;
+        return constant("self::KEY_TYPES");
     }
 
     /**
     * getter of the array of boolean defining if the value assosiated with the key is required (true)
     * when populating the database 
+    * These required keys should be defined as a constant of the DbManagementObject in array KEY_REQUIRED
     * @return array of boolean 
     */
     public function getRequiredKeys(){
-        return Measure::KEY_REQUIRED;
+        return constant("self::KEY_REQUIRED");
     }
 
     /**
     * getter of the array of boolean defining if the value assosiated with the key should be unique (true)
     * when populating the database 
+    * These unique keys should be defined as a constant of the DbManagementObject in array KEY_UNIQUE
     * @return array of boolean 
     */
     public function getUniqueKeys(){
-        return Measure::KEY_UNIQUE;
+        return constant("self::KEY_UNIQUE");
     }
 }
