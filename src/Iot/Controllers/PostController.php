@@ -7,10 +7,8 @@ use Croak\Iot\IoTRequests;
 use Croak\Iot\Measure;
 use Croak\Iot\Device;
 use Croak\Iot\User;
-use Croak\Iot\Exceptions\DeviceException;
-use Croak\Iot\Exceptions\MeasureException;
-use Croak\Iot\Exceptions\UserException;
-use Croak\Iot\Exceptions\DataBaseException;
+use Croak\DbManagement\Exceptions\DbManagementException;
+use Croak\DbManagement\Exceptions\DataBaseException;
 
 /**
 * Controller for routes based on "POST" requests
@@ -27,19 +25,18 @@ class PostController extends Controller
     public function postMeasure(Request $request, Response $response, $args){    
         
         $url = $request->getUri();
-        $sn = (string)$args['sn'];
+        $params = $request->getParsedBody();
         $date = date("Y-m-d H:i:s");
-        $params = $request->getParsedBody();  
-        $params[Measure::KEYS["deviceSn"]] = $sn;
-        $params[Measure::KEYS["date"]] = $date;
+        $params[Measure::KEYS["date"]] = $date;  
+        
+        if (isset($args['sn'])){
+            $params[Measure::KEYS["deviceSn"]] = (string)$args['sn'];
+        }        
 
         try{
             $id = IoTRequests::post($this->getDataBase(), $this->getQueries(), $params, "measure");
         }
-        catch(DeviceException $e){
-            return $this->requestError($response, $e->getMessage());
-        }
-        catch(MeasureException $e){
+        catch(DbManagementException $e){
             return $this->requestError($response, $e->getMessage());
         }
         catch(DataBaseException $e){
@@ -48,6 +45,38 @@ class PostController extends Controller
 
         $location = $url.'/'.$id;
         $message = "measure added successfully";
+        return $this->createSuccess($response, $location, $message);
+    }
+
+    /**
+    * add device in the database
+    * @param Psr\Http\Message\ServerRequestInterface $request
+    * @param Psr\Http\Message\ResponseInterface $response
+    * @param array args request arguments
+    * @return a http response indicating if the measure has been correctly added or not
+    */
+    public function postDevice(Request $request, Response $response, $args){    
+        
+        $url = $request->getUri();
+        $date = date("Y-m-d H:i:s");
+        $params = $request->getParsedBody();
+        if (isset($args['sn'])){
+            $params[Device::KEYS["deviceSn"]] = (string)$args['sn'];
+        }   
+        $params[Device::KEYS["date"]] = $date;
+
+        try{
+            $id = IoTRequests::post($this->getDataBase(), $this->getQueries(), $params, "device");
+        }
+        catch(DbManagementException $e){
+            return $this->requestError($response, $e->getMessage());
+        }
+        catch(DataBaseException $e){
+            return $this->serverError($response, $e->getMessage());
+        }
+
+        $location = $url.'/'.$id;
+        $message = "device added successfully";
         return $this->createSuccess($response, $location, $message);
     }
 
@@ -68,7 +97,7 @@ class PostController extends Controller
         try{
             $id = IoTRequests::post($this->getDataBase(), $this->getQueries(), $params, "user");
         }
-        catch(UserException $e){
+        catch(DbManagementException $e){
             return $this->requestError($response, $e->getMessage());
         }
         catch(DataBaseException $e){

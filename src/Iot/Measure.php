@@ -1,7 +1,8 @@
 <?php
 
 namespace Croak\Iot;
-use Croak\Iot\Exceptions\IotException;
+use Croak\DbManagement\Exceptions\IotException;
+use Croak\DbManagement\DbManagementObject;
 
 /**
  * Describes a Measure thanks to a set of parameters
@@ -13,7 +14,7 @@ use Croak\Iot\Exceptions\IotException;
  * representing the measure
  * the mesaure should be associated with a Measure defined by its serial number
  */
-class Measure extends IotObject{
+class Measure extends DbManagementObject{
 
     /**
     *@var Array  KEYS  key names expected in params file

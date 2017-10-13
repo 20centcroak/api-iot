@@ -4,8 +4,8 @@ namespace Croak\Iot\Controllers;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Croak\Iot\IoTRequests;
-use Croak\Iot\Exceptions\IotException;
-use Croak\Iot\Exceptions\DataBaseException;
+use Croak\DbManagement\Exceptions\DbManagementException;
+use Croak\DbManagement\Exceptions\DataBaseException;
 use Croak\Iot\Exceptions\InitException;
 
 /**
@@ -20,7 +20,7 @@ class GetController extends Controller
     * @param array args request arguments
     * @return a http response containing data about device as a json file or an error status if 
     * problems occur with database or if the device has not been found
-    * @throws Croak\Iot\IotException
+    * @throws Croak\DbManagement\DbManagementException
     */
     public function getDevices(Request $request, Response $response, $args){
         return $this->get($request, $response, $args, "device");
@@ -33,7 +33,7 @@ class GetController extends Controller
     * @param array args request arguments
     * @return a http response containing data about measure as a json file or an error status if 
     * problems occur with database
-    * @throws Croak\Iot\IotException
+    * @throws Croak\DbManagement\DbManagementException
     */
     public function getMeasures(Request $request, Response $response, $args){
         return $this->get($request, $response, $args, "measure");
@@ -46,7 +46,7 @@ class GetController extends Controller
     * @param array args request arguments
     * @return a http response containing data about measure as a json file or an error status if 
     * problems occur with database
-    * @throws Croak\Iot\IotException
+    * @throws Croak\DbManagement\DbManagementException
     */
     public function getUsers(Request $request, Response $response, $args){
         return $this->get($request, $response, $args, "user");
@@ -80,7 +80,7 @@ class GetController extends Controller
             }
             return $this->sendJson($response, $data);
         }
-        catch(IotException $e){
+        catch(DbManagementException $e){
             return $this->requestError($response, $e->getMessage());
         }
         catch(DatabaseException $e){
