@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "13d5aa9fbe2e5cb09f3e023bad159b52",
+    "content-hash": "54da6ee4cc26fb86f9ba0f435a5b9ad1",
     "packages": [
         {
             "name": "bshaffer/oauth2-server-php",
@@ -353,6 +353,86 @@
             "time": "2017-02-14T19:40:03+00:00"
         },
         {
+            "name": "croak-dbmanagement/dbmanagement",
+            "version": "1.01",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/20centcroak/DBManagement.git",
+                "reference": "4c5d0c7df314232e9f2514e48fb6b752362443e0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/20centcroak/DBManagement/zipball/4c5d0c7df314232e9f2514e48fb6b752362443e0",
+                "reference": "4c5d0c7df314232e9f2514e48fb6b752362443e0",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Croak\\DbManagement\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vincent Paveau",
+                    "role": "Developer"
+                }
+            ],
+            "description": "a set of php objects and interfaces for a simple use of databases using PDO",
+            "homepage": "https://github.com/20centcroak/DBManagement",
+            "keywords": [
+                "database",
+                "pdo"
+            ],
+            "time": "2017-10-12T15:19:51+00:00"
+        },
+        {
+            "name": "croak-sqlite-dbmanagement/sqlite-dbmanagement",
+            "version": "1.01",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/20centcroak/SqliteDbManagement.git",
+                "reference": "a1b1bc7c2e505d56e0317ed7781cbb8de1fae29a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/20centcroak/SqliteDbManagement/zipball/a1b1bc7c2e505d56e0317ed7781cbb8de1fae29a",
+                "reference": "a1b1bc7c2e505d56e0317ed7781cbb8de1fae29a",
+                "shasum": ""
+            },
+            "require": {
+                "croak-dbmanagement/dbmanagement": ">=1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Croak\\DbManagementSqlite\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vincent Paveau",
+                    "role": "Developer"
+                }
+            ],
+            "description": "a set of php objects and interfaces for a simple use of sqlite databases",
+            "homepage": "https://github.com/20centcroak/SqliteDbManagement",
+            "keywords": [
+                "database",
+                "pdo",
+                "sqlite"
+            ],
+            "time": "2017-10-12T15:20:22+00:00"
+        },
+        {
             "name": "doctrine/instantiator",
             "version": "1.1.0",
             "source": {
@@ -408,16 +488,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.22.1",
+            "version": "1.23.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "1e044bc4b34e91743943479f1be7a1d5eb93add0"
+                "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/1e044bc4b34e91743943479f1be7a1d5eb93add0",
-                "reference": "1e044bc4b34e91743943479f1be7a1d5eb93add0",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
+                "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
                 "shasum": ""
             },
             "require": {
@@ -438,7 +518,7 @@
                 "phpunit/phpunit-mock-objects": "2.3.0",
                 "ruflin/elastica": ">=0.90 <3.0",
                 "sentry/sentry": "^0.13",
-                "swiftmailer/swiftmailer": "~5.3"
+                "swiftmailer/swiftmailer": "^5.3|^6.0"
             },
             "suggest": {
                 "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
@@ -482,7 +562,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2017-03-13T07:08:03+00:00"
+            "time": "2017-06-19T01:22:40+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -1166,25 +1246,29 @@
         },
         {
             "name": "pimple/pimple",
-            "version": "v3.0.2",
+            "version": "v3.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silexphp/Pimple.git",
-                "reference": "a30f7d6e57565a2e1a316e1baf2a483f788b258a"
+                "reference": "4d45fb62d96418396ec58ba76e6f065bca16e10a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silexphp/Pimple/zipball/a30f7d6e57565a2e1a316e1baf2a483f788b258a",
-                "reference": "a30f7d6e57565a2e1a316e1baf2a483f788b258a",
+                "url": "https://api.github.com/repos/silexphp/Pimple/zipball/4d45fb62d96418396ec58ba76e6f065bca16e10a",
+                "reference": "4d45fb62d96418396ec58ba76e6f065bca16e10a",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=5.3.0",
+                "psr/container": "^1.0"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "^3.2"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0.x-dev"
+                    "dev-master": "3.2.x-dev"
                 }
             },
             "autoload": {
@@ -1208,7 +1292,7 @@
                 "container",
                 "dependency injection"
             ],
-            "time": "2015-09-11T15:10:35+00:00"
+            "time": "2017-07-23T07:32:15+00:00"
         },
         {
             "name": "psr/container",

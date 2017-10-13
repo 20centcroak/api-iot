@@ -2,12 +2,13 @@
 
 namespace Croak\Iot;
 
-use Croak\Iot\Exceptions\IotException;
+use Croak\DbManagement\Exceptions\IotException;
+use Croak\DbManagement\DbManagementObject;
 
 /**
  * Describes a Device thanks to a set of parameters
  */
-class Device extends IotObject
+class Device extends DbManagementObject
 {
 /**
     *@var Array  KEYS  key names expected in params file

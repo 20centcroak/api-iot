@@ -2,8 +2,6 @@
 namespace Croak\Iot\Controllers;
 
 use Psr\Http\Message\ResponseInterface as Response;
-use Croak\Iot\Databases\DbManagement;
-use Croak\Iot\Databases\IotQueries;
 use Slim\Container;
 
 /**

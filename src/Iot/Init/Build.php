@@ -1,8 +1,8 @@
 <?php
 
 namespace Croak\Iot\Init;
-use Croak\Iot\Databases\DbManagement;
-use Croak\Iot\Exceptions\DataBaseException;
+use Croak\DbManagement\DbManagement;
+use Croak\DbManagement\Exceptions\DataBaseException;
 use Croak\Iot\Databases\IotQueries;
 use Croak\Iot\Exceptions\BuildException;
 use Croak\Iot\Init\Config;

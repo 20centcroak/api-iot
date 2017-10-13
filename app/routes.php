@@ -52,6 +52,16 @@ $app->get('/measures', Croak\Iot\Controllers\GetController::class.':getMeasures'
 $app->post('/measure/{sn}', Croak\Iot\Controllers\PostController::class.':postMeasure');
 
 /** 
+* post device in the database thanks to a POST request 
+*/
+$app->post('/device/{sn}', Croak\Iot\Controllers\PostController::class.':postDevice');
+
+/** 
+* post device in the database thanks to a POST request 
+*/
+$app->post('/device', Croak\Iot\Controllers\PostController::class.':postDevice');
+
+/** 
 * post user in the database thanks to a POST request 
 */
 $app->post('/user', Croak\Iot\Controllers\PostController::class.':postUser');

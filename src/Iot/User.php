@@ -1,7 +1,8 @@
 <?php
 
 namespace Croak\Iot;
-use Croak\Iot\Exceptions\IotException;
+use Croak\DbManagement\Exceptions\IotException;
+use Croak\DbManagement\DbManagementObject;
 
 /**
  * Describes a User thanks to a set of parameters
@@ -11,7 +12,7 @@ use Croak\Iot\Exceptions\IotException;
  * -password
  * -caracteristics
  */
-class User extends IotObject{
+class User extends DbManagementObject{
 
     /**
     *@var Array  KEYS  key names expected in params file

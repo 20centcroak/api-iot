@@ -1,7 +1,7 @@
 <?php
 
 use Croak\Iot\Init\Config;
-use Croak\Iot\Databases\DbManagementSqlite;
+use \Croak\DbManagementSqlite\DbManagementSqlite;
 use Croak\Iot\Databases\SqliteIotQueries;
 use Monolog\Logger;
 
