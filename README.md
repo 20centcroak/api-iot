@@ -6,6 +6,7 @@ See this list of [tools](https://github.com/20centcroak/api-iot/wiki/Tools) to s
 * clone the project
 * run `composer install` in the directory containing composer.json
 * be sure that the `extension=php_pdo_sqlite.dll` in the php.ini file of your php installation is uncommented
+* be sure that the `extension=php_openssl.dll` is uncommented as well 
 * run `php -S localhost:8080` in the "web" directory of the project
 * open your brower and enter the following adress: `http://localhost:8080/`, a "Welcome!" message should be displayed if everything is ok
 * use one of the curl command below to test the api
