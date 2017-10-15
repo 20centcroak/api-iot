@@ -21,7 +21,6 @@ $container['logger'] = function ($c) {
 //which should be caught when using this service
 $container['config'] = function() {
     $config = new Config(__DIR__."/..");
-    $config->readConfigFile();
     return $config;
 };
 

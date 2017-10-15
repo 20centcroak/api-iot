@@ -106,7 +106,9 @@ class Controller
     */
     public function getDataBase(){
         $db = $this->container->database;
-        $url = $this->container->config->getDbUrl();
+        $config = $this->getConfig();
+        $config->readConfigFile();
+        $url = $config->getDbUrl();
         $db->connect($url);
         return $db;
     }

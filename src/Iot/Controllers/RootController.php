@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Croak\Iot\Init\Build;
 use Croak\Iot\Exceptions\BuildException;
 use Croak\Iot\Exceptions\InitException;
+use Croak\Iot\Init\Config;
 
 /**
 * controller for specific requests (installation, home page)
@@ -44,24 +45,30 @@ class RootController extends Controller
         $this->debug("accessing install page");        
         $message = "installation failed, ";        
 
-        try{
-            $config = $this->getConfig();
+        $config = $this->getConfig();
 
-            //build the app: create default config file  
-            #TODO : si le fichier json existe, alors on va remplacer son contenu par le 
-            #TODO contenu par défaut. Il faudrait vérifier s'il n'est pas corrompu et ne rien faire dans ce cas
-            #TODO et avoir une méthode de retour au réglage usine
-            Build::createInitFile($config);
-            $this->debug("init file has been accessed successfully");
-        }            
-        catch(InitException $e){
-            return $this->serverError($response,$message.$e->getMessage());
+        try{            
+            $config->readConfigFile();            
         }
+        catch(InitException $e){
+            $this->debug("config file does not exist, it should be created");
+            try{
+                #TODO Il faudrait vérifier s'il n'est pas corrompu et ne rien faire dans ce cas
+                #TODO et avoir une méthode de retour au réglage usine
+                Build::createInitFile($config);
+                $this->debug("init file has been accessed successfully");
+            }            
+            catch(InitException $e){
+                return $this->serverError($response,$message.$e->getMessage());
+            }
+        }
+
+       
         
         //build the app: create database and tables
         try{
             Build::build($config, $this->getDataBase(), $this->getQueries() );
-            $this->debug("tables has been accessed successfully");
+            $this->debug("table has been accessed successfully");
         }
         catch(BuildException $be){
             return $this->serverError($response, $message.$be->getMessage());
