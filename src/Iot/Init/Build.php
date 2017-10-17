@@ -45,6 +45,12 @@ class Build{
     */
     public static function build(Config $config, DbManagement $db, IotQueries $queries)
     {
+
+        if (!file_exists($config->getDbUrl())){
+            if (!mkdir(dirname($config->getDbUrl()))){
+                throw new BuildException(DataBaseException::CREATE_DB_DIRECTORY_FAILED);
+            }
+        }
         try{
             $db->connect($config->getDbUrl());
         }

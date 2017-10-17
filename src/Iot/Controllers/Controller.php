@@ -114,6 +114,13 @@ class Controller
     }
 
     /**
+    * getter for an instance of the implementation of DbManagement
+    */
+    public function getDataBaseInstance(){
+        return $this->container->database;
+    }
+
+    /**
     * getter for the Iot queries
     * @return Croak\Iot\Databases\Queries
     */

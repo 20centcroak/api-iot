@@ -56,18 +56,17 @@ class RootController extends Controller
                 #TODO Il faudrait vérifier s'il n'est pas corrompu et ne rien faire dans ce cas
                 #TODO et avoir une méthode de retour au réglage usine
                 Build::createInitFile($config);
+                $config->readConfigFile();
                 $this->debug("init file has been accessed successfully");
             }            
             catch(InitException $e){
                 return $this->serverError($response,$message.$e->getMessage());
             }
-        }
-
-       
+        }       
         
         //build the app: create database and tables
         try{
-            Build::build($config, $this->getDataBase(), $this->getQueries() );
+            Build::build($config, $this->getDataBaseInstance(), $this->getQueries() );
             $this->debug("table has been accessed successfully");
         }
         catch(BuildException $be){
