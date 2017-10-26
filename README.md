@@ -2,7 +2,7 @@
 Demo of a simple REST api to manage connected devices. This API is based on [Slim framework](https://www.slimframework.com/).
 
 ## Quick start
-See this list of [tools](https://github.com/20centcroak/api-iot/wiki/Tools) to start quickly
+See this list of [tools](https://github.com/20centcroak/api-iot/wiki/Tools-for-developper) to start quickly
 * clone the project
 * run `composer install` in the directory containing composer.json
 * be sure that the `extension=php_pdo_sqlite.dll` in the php.ini file of your php installation is uncommented
